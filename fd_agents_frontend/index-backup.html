@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD Portfolio Optimizer - Intelligent Fixed Deposit Allocation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 FD Portfolio Optimizer</h1>
+                <p>Intelligent Fixed Deposit Allocation with AI Recommendations</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- LEFT SIDE: FORM -->
+            <section class="form-section">
+                <h2>📝 Your Investment Details</h2>
+                <form id="optimizeForm">
+                    <div class="form-group">
+                        <label for="amount">
+                            💵 Investment Amount (Rs)
+                            <span class="amount-display">₹<span id="amountValue">1000000</span></span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="amountRange" 
+                            min="100000" 
+                            max="10000000" 
+                            step="100000" 
+                            value="1000000"
+                            class="slider"
+                        >
+                        <input 
+                            type="number" 
+                            id="amount" 
+                            value="1000000" 
+                            min="100000" 
+                            max="10000000"
+                            class="input-number"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tenure">⏱️ Tenure (Months)</label>
+                        <select id="tenure" required>
+                            <option value="6">6 months</option>
+                            <option value="12" selected>12 months (1 year)</option>
+                            <option value="18">18 months</option>
+                            <option value="24">24 months (2 years)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="risk">📊 Risk Profile</label>
+                        <div class="risk-options">
+                            <label class="risk-label">
+                                <input 
+                                    type="radio" 
+                                    name="risk" 
+                                    value="conservative"
+                                > Conservative (Safe)
+                            </label>
+                            <label class="risk-label">
+                                <input 
+                                    type="radio" 
+                                    name="risk" 
+                                    value="moderate" 
+                                    checked
+                                > Moderate (Balanced)
+                            </label>
+                            <label class="risk-label">
+                                <input 
+                                    type="radio" 
+                                    name="risk" 
+                                    value="aggressive"
+                                > Aggressive (High Return)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        🚀 Optimize My Portfolio
+                    </button>
+                </form>
+
+                <div class="info-box">
+                    <h3>ℹ️ Why Use This?</h3>
+                    <ul>
+                        <li>✅ Mathematically optimized allocation using PSO Algorithm</li>
+                        <li>✅ Spread across 8 banks for maximum safety (DICGC compliant)</li>
+                        <li>✅ AI-powered bank selection and timing recommendations</li>
+                        <li>✅ Instant tax calculations (Form 15G/15H)</li>
+                        <li>✅ Real-time market analysis</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- RIGHT SIDE: RESULTS -->
+            <section class="results-section">
+                <div id="loadingSpinner" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Analyzing FD rates and optimizing your portfolio...</p>
+                </div>
+
+                <div id="resultsContainer" class="results-container hidden">
+                    <!-- SUMMARY CARD -->
+                    <div class="summary-card">
+                        <div class="summary-item">
+                            <span class="label">Total Investment</span>
+                            <span class="value" id="summaryInvestment">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Expected Annual Return</span>
+                            <span class="value highlight" id="summaryReturn">0%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Interest Earned</span>
+                            <span class="value" id="summaryInterest">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Maturity Amount</span>
+                            <span class="value highlight" id="summaryMaturity">₹0</span>
+                        </div>
+                    </div>
+
+                    <!-- ALLOCATION TABLE -->
+                    <div class="section-card">
+                        <h3>📊 Your Optimal Allocation</h3>
+                        <div class="table-responsive">
+                            <table id="allocationTable" class="allocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Bank Name</th>
+                                        <th>Amount</th>
+                                        <th>Rate</th>
+                                        <th>Interest</th>
+                                        <th>Maturity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allocationBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- AI AGENTS RECOMMENDATIONS -->
+                    <div class="agents-section">
+                        <h3>🤖 AI Agent Recommendations</h3>
+                        
+                        <div class="agent-card agent-1">
+                            <h4>🏦 Agent 1: Bank Recommendation</h4>
+                            <div id="agentBankRec" class="agent-content">
+                                <p>Analyzing banks...</p>
+                            </div>
+                        </div>
+
+                        <div class="agent-card agent-2">
+                            <h4>📈 Agent 2: Rate Decision</h4>
+                            <div id="agentRateDec" class="agent-content">
+                                <p>Analyzing market timing...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KEY ACTIONS -->
+                    <div class="section-card actions-card">
+                        <h3>✅ Key Actions for You</h3>
+                        <ol>
+                            <li>Book FDs per the allocation above (split across banks as shown)</li>
+                            <li>Submit Form 15G at the start of next financial year (April 1)</li>
+                            <li>Set calendar reminders for each FD maturity date</li>
+                            <li>On maturity, re-evaluate rates for next investment</li>
+                        </ol>
+                    </div>
+
+                    <!-- RECOMMENDATION BANNER -->
+                    <div class="recommendation-banner" id="recommendationBanner">
+                        <p id="recommendationText">Book NOW — FD rates are near their cycle peak</p>
+                    </div>
+                </div>
+
+                <div id="errorContainer" class="error-container hidden">
+                    <p id="errorMessage"></p>
+                    <button onclick="location.reload()" class="btn-retry">Try Again</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>🔒 Secure • 📊 Data-Driven • 🎯 DICGC Compliant | Powered by PSO Algorithm & AI Agents</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
