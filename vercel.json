@@ -9,6 +9,10 @@
         "runtime": "python3.11",
         "requirements": "fd_agents/requirements.txt"
       }
+    },
+    {
+      "src": "public",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -34,7 +38,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "public/$1"
     }
   ],
   "env": {
