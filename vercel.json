@@ -1,36 +1,52 @@
 {
   "version": 2,
-  "buildCommand": "npm install --legacy-peer-deps 2>/dev/null || true",
   "builds": [
     {
       "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb",
-        "runtime": "python3.11"
+        "runtime": "python3.11",
+        "requirements": "fd_agents/requirements.txt"
       }
     },
     {
-      "src": "fd_agents_frontend",
+      "src": "fd_agents_frontend/**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "^/api/.*",
       "dest": "api/index.py"
     },
     {
-      "src": "/optimize",
+      "src": "^/health.*",
       "dest": "api/index.py"
     },
     {
-      "src": "/health",
+      "src": "^/optimize.*",
       "dest": "api/index.py"
+    },
+    {
+      "src": "^/docs.*",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "^/openapi\\.json.*",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
       "dest": "fd_agents_frontend/$1"
+    },
+    {
+      "src": "/",
+      "dest": "fd_agents_frontend/index.html"
     }
   ],
   "env": {
@@ -41,16 +57,5 @@
       "maxDuration": 30,
       "memory": 1024
     }
-  },
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    }
-  ]
+  }
 }
