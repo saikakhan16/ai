@@ -4,7 +4,7 @@
 // Dynamic API URL - works for localhost and Vercel deployment
 const API_BASE_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:8000' 
-    : window.location.origin;
+    : ''; // Use relative paths on Vercel (e.g., /optimize)
 
 // Charts instances
 let allocationChart = null;
