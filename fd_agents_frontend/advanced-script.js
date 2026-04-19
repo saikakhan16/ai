@@ -117,8 +117,8 @@ function setupOptimizeForm() {
 
 async function optimizePortfolio() {
     const amount = parseFloat(document.getElementById('amount').value);
-    const tenure = parseInt(document.querySelector('input[name="tenure"]:checked').value);
-    const risk = document.querySelector('input[name="risk"]:checked').value;
+    const tenure_months = parseInt(document.querySelector('input[name="tenure"]:checked').value);
+    const risk_profile = document.querySelector('input[name="risk"]:checked').value;
 
     if (!amount || amount < 100000) {
         showOptimizerError('Amount must be at least ₹100,000');
@@ -131,7 +131,12 @@ async function optimizePortfolio() {
         const response = await fetch(`${API_BASE_URL}/optimize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount, tenure, risk })
+            body: JSON.stringify({ 
+                amount, 
+                tenure_months, 
+                risk_profile,
+                name: "Investor"
+            })
         });
 
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
@@ -140,7 +145,7 @@ async function optimizePortfolio() {
 
         if (data.success) {
             currentResult = data;
-            displayOptimizerResults(data, amount, tenure, risk);
+            displayOptimizerResults(data, amount, tenure_months, risk_profile);
             updateDashboard(data, amount);
         } else {
             showOptimizerError(data.error || 'Optimization failed');
@@ -205,16 +210,27 @@ function displayOptimizerResults(data, amount, tenure, risk) {
     });
 
     // Parse AI recommendations
-    const bankRecMatch = report.match(/BANK SELECTION GUIDANCE[\s\S]*?([\s\S]*?)RATE TIMING DECISION/);
-    const rateDecMatch = report.match(/RATE TIMING DECISION[\s\S]*?([\s\S]*?)FINAL RECOMMENDATION/);
+    const bankRecMatch = data.bank_recommendation || '';
+    const rateDecMatch = data.rate_decision || '';
 
     if (bankRecMatch) {
-        document.getElementById('optAgentBank').innerHTML = bankRecMatch[1].trim().substring(0, 300) + '...';
+        document.getElementById('optAgentBank').innerHTML = `
+            <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.4; color: #333; max-height: 300px; overflow-y: auto;">
+                ${bankRecMatch.substring(0, 500)}...
+            </div>
+        `;
+    } else {
+        document.getElementById('optAgentBank').innerHTML = '<p>No recommendation available</p>';
     }
 
     if (rateDecMatch) {
-        const rateText = rateDecMatch[1].trim();
-        document.getElementById('optAgentRate').innerHTML = rateText.substring(0, 300) + '...';
+        document.getElementById('optAgentRate').innerHTML = `
+            <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.4; color: #333; max-height: 300px; overflow-y: auto;">
+                ${rateDecMatch.substring(0, 500)}...
+            </div>
+        `;
+    } else {
+        document.getElementById('optAgentRate').innerHTML = '<p>No recommendation available</p>';
     }
 
     // Render charts
@@ -312,8 +328,8 @@ function setupScenarios() {
 async function addScenario() {
     const name = document.getElementById('scenarioName').value;
     const amount = parseFloat(document.getElementById('scenarioAmount').value);
-    const tenure = document.getElementById('scenarioTenure').value;
-    const risk = document.getElementById('scenarioRisk').value;
+    const tenure_months = parseInt(document.getElementById('scenarioTenure').value);
+    const risk_profile = document.getElementById('scenarioRisk').value;
 
     if (!name || !amount) {
         alert('Please fill all fields');
@@ -324,7 +340,7 @@ async function addScenario() {
         const response = await fetch(`${API_BASE_URL}/optimize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount, tenure: parseInt(tenure), risk })
+            body: JSON.stringify({ amount, tenure_months, risk_profile, name })
         });
 
         if (!response.ok) throw new Error();
@@ -338,8 +354,8 @@ async function addScenario() {
         scenarios.push({
             name,
             amount,
-            tenure,
-            risk,
+            tenure_months,
+            risk_profile,
             interest: totalInterest,
             maturity: totalMaturity
         });

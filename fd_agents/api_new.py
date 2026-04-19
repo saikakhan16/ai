@@ -14,6 +14,8 @@ from datetime import datetime
 import traceback
 
 from simple_main import run_fd_optimizer
+from agents.bank_selector_agent import get_bank_recommendation
+from agents.rate_decision_agent import get_rate_decision
 
 # ── LOGGING ────────────────────────────────────────────────────────────────────
 
@@ -77,6 +79,8 @@ class OptimizeResponse(BaseModel):
     """API response with optimization result"""
     success: bool
     report: str
+    bank_recommendation: str = ""
+    rate_decision: str = ""
     timestamp: str
     request_params: Dict[str, Any]
     error: Optional[str] = None
@@ -112,7 +116,7 @@ async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
     - tenure_months: 3, 6, 9, 12, 18, or 24 months
     - name: Your name for personalized report
     
-    Returns: Personalized portfolio report with allocation table
+    Returns: Personalized portfolio report with allocation table + AI recommendations
     """
     logger.info(f"Optimization request: amount={request.amount}, risk={request.risk_profile}, tenure={request.tenure_months}m")
     
@@ -137,11 +141,32 @@ async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
         
         report = run_fd_optimizer(user_input)
         
-        logger.info("Optimization completed successfully")
+        # Get AI Agent recommendations
+        banks_data = [
+            {"name": "Bajaj Finance", "rate": 8.35},
+            {"name": "Shriram Finance", "rate": 8.30},
+            {"name": "Mahindra Finance", "rate": 8.20},
+            {"name": "Suryoday SFB", "rate": 8.25},
+            {"name": "Unity SFB", "rate": 8.15},
+            {"name": "Utkarsh SFB", "rate": 8.10},
+            {"name": "Shivalik SFB", "rate": 8.00},
+            {"name": "Jana SFB", "rate": 7.90},
+        ]
+        
+        # Agent 1: Bank Selection
+        bank_rec = get_bank_recommendation(request.risk_profile, request.tenure_months, banks_data)
+        
+        # Agent 2: Rate Decision
+        current_rate = 8.35 if request.risk_profile == "aggressive" else 8.25 if request.risk_profile == "moderate" else 8.15
+        rate_decision = get_rate_decision(request.tenure_months, current_rate)
+        
+        logger.info("Optimization completed successfully with AI recommendations")
         
         return OptimizeResponse(
             success=True,
             report=report,
+            bank_recommendation=bank_rec,
+            rate_decision=rate_decision,
             timestamp=datetime.now().isoformat(),
             request_params=user_input,
             error=None
@@ -152,6 +177,8 @@ async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
         return OptimizeResponse(
             success=False,
             report="",
+            bank_recommendation="",
+            rate_decision="",
             timestamp=datetime.now().isoformat(),
             request_params=request.dict(),
             error=f"Validation error: {str(e)}"
@@ -162,6 +189,8 @@ async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
         return OptimizeResponse(
             success=False,
             report="",
+            bank_recommendation="",
+            rate_decision="",
             timestamp=datetime.now().isoformat(),
             request_params=request.dict(),
             error=f"Server error: {str(e)}"
