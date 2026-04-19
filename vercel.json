@@ -9,44 +9,32 @@
         "runtime": "python3.11",
         "requirements": "fd_agents/requirements.txt"
       }
-    },
-    {
-      "src": "fd_agents_frontend/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "^/api/.*",
+      "src": "^/api(/.*)?$",
       "dest": "api/index.py"
     },
     {
-      "src": "^/health.*",
+      "src": "^/health(/.*)?$",
       "dest": "api/index.py"
     },
     {
-      "src": "^/optimize.*",
+      "src": "^/optimize(/.*)?$",
       "dest": "api/index.py"
     },
     {
-      "src": "^/docs.*",
+      "src": "^/docs(/.*)?$",
       "dest": "api/index.py"
     },
     {
-      "src": "^/openapi\\.json.*",
+      "src": "^/openapi\\.json.*$",
       "dest": "api/index.py"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "fd_agents_frontend/$1"
-    },
-    {
-      "src": "/",
-      "dest": "fd_agents_frontend/index.html"
+      "dest": "/public/$1"
     }
   ],
   "env": {
