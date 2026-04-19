@@ -1,7 +1,10 @@
 // FD Portfolio Optimizer Pro - Advanced Script
 // Complete frontend logic with all features
 
-const API_BASE_URL = 'http://localhost:8000';
+// Dynamic API URL - works for localhost and Vercel deployment
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8000' 
+    : window.location.origin;
 
 // Charts instances
 let allocationChart = null;
