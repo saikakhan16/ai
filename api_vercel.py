@@ -1,12 +1,12 @@
 """
-FD Portfolio Optimizer — Vercel Serverless Handler (Minimal & Robust)
+FD Portfolio Optimizer — Vercel Serverless Handler (Root Level)
+Optimized for Vercel Python serverless environment
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from datetime import datetime
-import json
 
 # ────────────────────────────────────────────────────────────────────
 
@@ -47,20 +47,8 @@ class OptimizeResponse(BaseModel):
 
 
 # ────────────────────────────────────────────────────────────────────
-# DUMMY DATA & FUNCTIONS
+# HELPER FUNCTIONS
 # ────────────────────────────────────────────────────────────────────
-
-BANKS = [
-    {"name": "Bajaj Finance", "rate": 8.35, "type": "NBFC"},
-    {"name": "Shriram Finance", "rate": 8.30, "type": "NBFC"},
-    {"name": "Mahindra Finance", "rate": 8.20, "type": "NBFC"},
-    {"name": "Suryoday SFB", "rate": 8.25, "type": "SFB"},
-    {"name": "Unity SFB", "rate": 8.15, "type": "SFB"},
-    {"name": "Utkarsh SFB", "rate": 8.10, "type": "SFB"},
-    {"name": "Shivalik SFB", "rate": 8.00, "type": "SFB"},
-    {"name": "Jana SFB", "rate": 7.90, "type": "SFB"},
-]
-
 
 def get_bank_recommendation(risk_profile: str, tenure_months: int) -> str:
     """Simple bank recommendation based on risk profile"""
@@ -70,12 +58,11 @@ def get_bank_recommendation(risk_profile: str, tenure_months: int) -> str:
             <h4>💚 Conservative Portfolio (Low Risk)</h4>
             <p><strong>Recommended Allocation:</strong></p>
             <ul>
-                <li>Suryoday SFB: 40% (₹400,000) @ 8.25%</li>
-                <li>Unity SFB: 30% (₹300,000) @ 8.15%</li>
-                <li>Shivalik SFB: 20% (₹200,000) @ 8.00%</li>
-                <li>Jana SFB: 10% (₹100,000) @ 7.90%</li>
+                <li>Suryoday SFB: 40% @ 8.25%</li>
+                <li>Unity SFB: 30% @ 8.15%</li>
+                <li>Shivalik SFB: 20% @ 8.00%</li>
+                <li>Jana SFB: 10% @ 7.90%</li>
             </ul>
-            <p><strong>Expected Returns:</strong> ₹99,000 per year</p>
         </div>
         """
     elif risk_profile == "aggressive":
@@ -84,37 +71,34 @@ def get_bank_recommendation(risk_profile: str, tenure_months: int) -> str:
             <h4>🔥 Aggressive Portfolio (High Returns)</h4>
             <p><strong>Recommended Allocation:</strong></p>
             <ul>
-                <li>Bajaj Finance: 40% (₹400,000) @ 8.35%</li>
-                <li>Shriram Finance: 35% (₹350,000) @ 8.30%</li>
-                <li>Mahindra Finance: 25% (₹250,000) @ 8.20%</li>
+                <li>Bajaj Finance: 40% @ 8.35%</li>
+                <li>Shriram Finance: 35% @ 8.30%</li>
+                <li>Mahindra Finance: 25% @ 8.20%</li>
             </ul>
-            <p><strong>Expected Returns:</strong> ₹125,500 per year</p>
         </div>
         """
-    else:  # moderate
+    else:
         return """
         <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
             <h4>⚡ Moderate Portfolio (Balanced)</h4>
             <p><strong>Recommended Allocation:</strong></p>
             <ul>
-                <li>Bajaj Finance: 25% (₹250,000) @ 8.35%</li>
-                <li>Suryoday SFB: 25% (₹250,000) @ 8.25%</li>
-                <li>Shriram Finance: 25% (₹250,000) @ 8.30%</li>
-                <li>Unity SFB: 25% (₹250,000) @ 8.15%</li>
+                <li>Bajaj Finance: 25% @ 8.35%</li>
+                <li>Suryoday SFB: 25% @ 8.25%</li>
+                <li>Shriram Finance: 25% @ 8.30%</li>
+                <li>Unity SFB: 25% @ 8.15%</li>
             </ul>
-            <p><strong>Expected Returns:</strong> ₹101,000 per year</p>
         </div>
         """
 
 
 def get_rate_decision(tenure_months: int) -> str:
-    """Simple rate decision"""
+    """Rate decision based on tenure"""
     return """
     <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
-        <h4>📊 Rate Decision Analysis</h4>
-        <p><strong>Current RBI Rate:</strong> 6.5% | <strong>Inflation:</strong> 4.2%</p>
-        <p><strong>Recommendation:</strong> <span style="color: green; font-weight: bold;">✅ BOOK NOW</span></p>
-        <p>Current FD rates are attractive. Rates may decline if RBI cuts policy rate.</p>
+        <h4>📊 Rate Decision</h4>
+        <p><strong>RBI Policy Rate:</strong> 6.5% | <strong>Inflation:</strong> 4.2%</p>
+        <p style="color: green; font-weight: bold;">✅ Book Now - Rates are Attractive</p>
     </div>
     """
 
@@ -125,7 +109,7 @@ def get_rate_decision(tenure_months: int) -> str:
 
 @app.get("/health")
 async def health_check():
-    """Health check"""
+    """Health check endpoint"""
     return {
         "status": "healthy",
         "version": "3.0.0",
@@ -137,28 +121,15 @@ async def health_check():
 async def optimize_portfolio(request: OptimizeRequest):
     """Portfolio optimization endpoint"""
     try:
-        # Simple allocation logic
-        allocation = {
-            "Bajaj Finance": request.amount * 0.25,
-            "Suryoday SFB": request.amount * 0.25,
-            "Shriram Finance": request.amount * 0.25,
-            "Unity SFB": request.amount * 0.25,
-        }
-        
-        # Simple return calculation
-        avg_rate = 8.25
-        annual_return = request.amount * (avg_rate / 100)
+        annual_return = request.amount * 0.0825  # 8.25% average
         
         report = f"""
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px;">
-            <h3>📋 Portfolio Optimization Report</h3>
-            <p><strong>Investor:</strong> {request.name}</p>
-            <p><strong>Investment Amount:</strong> ₹{request.amount:,.0f}</p>
-            <p><strong>Risk Profile:</strong> {request.risk_profile.upper()}</p>
-            <p><strong>Tenure:</strong> {request.tenure_months} months</p>
-            <p><strong>Expected Annual Return:</strong> ₹{annual_return:,.0f}</p>
-            <p><strong>Allocation Strategy:</strong> Equally distributed across 4 institutions</p>
-        </div>
+        <h3>📋 Portfolio Report</h3>
+        <p><strong>Investor:</strong> {request.name}</p>
+        <p><strong>Amount:</strong> ₹{request.amount:,.0f}</p>
+        <p><strong>Risk:</strong> {request.risk_profile.upper()}</p>
+        <p><strong>Tenure:</strong> {request.tenure_months} months</p>
+        <p><strong>Expected Return:</strong> ₹{annual_return:,.0f}/year</p>
         """
         
         return OptimizeResponse(
@@ -173,7 +144,7 @@ async def optimize_portfolio(request: OptimizeRequest):
     except Exception as e:
         return OptimizeResponse(
             success=False,
-            report="Optimization failed",
+            report="Error in optimization",
             timestamp=datetime.now().isoformat(),
             request_params=request.dict(),
             error=str(e)
@@ -184,11 +155,12 @@ async def optimize_portfolio(request: OptimizeRequest):
 async def root():
     """Root endpoint"""
     return {
-        "message": "FD Portfolio Optimizer API v3.0.0",
-        "status": "ready",
-        "endpoints": {
-            "health": "GET /health",
-            "optimize": "POST /optimize"
-        }
+        "message": "FD Portfolio Optimizer API",
+        "status": "running",
+        "version": "3.0.0"
     }
 
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
