@@ -37,8 +37,16 @@
       "dest": "api/index.py"
     },
     {
-      "src": "/(.*)",
+      "src": "/static/(.*)",
+      "dest": "public/static/$1"
+    },
+    {
+      "src": "/(.+\\..+)$",
       "dest": "public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "public/index.html"
     }
   ],
   "env": {
