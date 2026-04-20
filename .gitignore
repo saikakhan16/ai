@@ -58,3 +58,5 @@ Thumbs.db
 temp/
 tmp/
 *.tmp
+.vercel
+.env*.local

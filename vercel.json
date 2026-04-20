@@ -2,43 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "api_vercel.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "runtime": "python3.11"
-      }
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "^/api(/.*)?$",
-      "dest": "api_vercel.py"
+      "src": "/",
+      "dest": "/public/Overview.html"
     },
     {
-      "src": "^/health(/.*)?$",
-      "dest": "api_vercel.py"
-    },
-    {
-      "src": "^/optimize(/.*)?$",
-      "dest": "api_vercel.py"
-    },
-    {
-      "src": "/(.+\\..+)$",
-      "dest": "public/$1"
+      "src": "/(.*\\..*)",
+      "dest": "/public/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "public/Overview.html"
+      "dest": "/public/Overview.html"
     }
-  ],
-  "env": {
-    "PYTHONUNBUFFERED": "1"
-  },
-  "functions": {
-    "api_vercel.py": {
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  }
+  ]
 }
