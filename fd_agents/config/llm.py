@@ -55,18 +55,18 @@ def _get_llm_with_retry(model: str, api_key: str):
         model=f"groq/{model}",
         api_key=api_key,
         temperature=0.1,
-        max_tokens=2048,
-        timeout=60,
+        max_tokens=1024,
+        timeout=90,
     )
 
 
-def get_llm(model: str = "llama-3.3-70b-versatile"):
+def get_llm(model: str = "llama-3.1-8b-instant"):
     """
     Returns a CrewAI-compatible Groq LLM instance with rate limiting & retry logic.
     
     Available Groq models (all FREE):
-      - llama-3.3-70b-versatile  (smartest, recommended - 500 req/min)
-      - llama-3.1-8b-instant     (fastest, lighter - 6000 TPM)
+      - llama-3.1-8b-instant     (fastest, 20k TPM - DEFAULT)
+      - llama-3.3-70b-versatile  (smarter, 12k TPM - slower)
       - mixtral-8x7b-32768       (great for long context)
     """
     api_key = os.getenv("GROQ_API_KEY")

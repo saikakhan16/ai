@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Analytics · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+</head>
+<body data-page="analytics" data-crumb="Analytics" data-pill="<span class='ind'></span> YTD · +4.66%">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Analytics">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow"><span class="tick"></span> Analytics</div>
+        <h2 class="screen-title">Portfolio performance <em>at a glance</em>.</h2>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <span class="tag">1M</span><span class="tag">6M</span><span class="tag lime">YTD</span><span class="tag">1Y</span><span class="tag">All</span>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card span-8 trend-card">
+        <div class="trend-head">
+          <div>
+            <div class="card-title">Portfolio value · monthly accrual</div>
+            <div class="trend-val">₹ 48,20,400</div>
+            <div class="trend-delta">↗ +₹ 2,14,300 YTD · +4.66%</div>
+          </div>
+          <div class="legend">
+            <div class="it"><span class="sw" style="background:var(--lime);"></span> FinThesis</div>
+            <div class="it"><span class="sw" style="background:oklch(1 0 0 / 0.2);"></span> Single-bank</div>
+            <div class="it"><span class="sw" style="background:var(--blue); opacity:0.6;"></span> Savings a/c</div>
+          </div>
+        </div>
+
+        <svg viewBox="0 0 1000 280" style="width:100%; height:280px; margin-top:14px;">
+          <defs>
+            <linearGradient id="areaG" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="oklch(0.88 0.18 130)" stop-opacity="0.35"/>
+              <stop offset="1" stop-color="oklch(0.88 0.18 130)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <g stroke="oklch(1 0 0 / 0.05)">
+            <line x1="0" y1="50" x2="1000" y2="50"/>
+            <line x1="0" y1="110" x2="1000" y2="110"/>
+            <line x1="0" y1="170" x2="1000" y2="170"/>
+            <line x1="0" y1="230" x2="1000" y2="230"/>
+          </g>
+          <path d="M0 228 C 120 226, 240 224, 360 222 S 600 216, 840 212 L 1000 208" fill="none" stroke="oklch(0.74 0.12 235 / 0.5)" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <path d="M0 200 C 100 196, 200 190, 320 184 S 560 160, 760 138 L 1000 118" fill="none" stroke="oklch(1 0 0 / 0.28)" stroke-width="1.5"/>
+          <path d="M0 195 C 90 188, 200 178, 320 162 S 560 118, 760 78 L 1000 52" fill="none" stroke="oklch(0.88 0.18 130)" stroke-width="2.2"/>
+          <path d="M0 195 C 90 188, 200 178, 320 162 S 560 118, 760 78 L 1000 52 L 1000 280 L 0 280 Z" fill="url(#areaG)"/>
+          <circle cx="1000" cy="52" r="4" fill="oklch(0.88 0.18 130)"/>
+          <circle cx="1000" cy="52" r="10" fill="oklch(0.88 0.18 130 / 0.25)"/>
+          <g font-family="JetBrains Mono" font-size="10" fill="oklch(0.58 0.015 260)">
+            <text x="0" y="268">JAN</text>
+            <text x="140" y="268">FEB</text>
+            <text x="280" y="268">MAR</text>
+            <text x="420" y="268">APR</text>
+            <text x="560" y="268">MAY</text>
+            <text x="700" y="268">JUN</text>
+            <text x="840" y="268">JUL</text>
+            <text x="985" y="268" text-anchor="end">AUG</text>
+          </g>
+          <g transform="translate(760, 40)">
+            <rect x="-60" y="-28" width="120" height="52" rx="8" fill="oklch(0.22 0.022 260)" stroke="oklch(1 0 0 / 0.12)"/>
+            <text x="0" y="-10" font-family="Inter" font-size="10" fill="oklch(0.58 0.015 260)" text-anchor="middle">JUL · Accrual</text>
+            <text x="0" y="8" font-family="JetBrains Mono" font-size="13" fill="oklch(0.97 0.005 260)" text-anchor="middle">+₹ 31,420</text>
+            <text x="0" y="20" font-family="JetBrains Mono" font-size="10" fill="oklch(0.88 0.18 130)" text-anchor="middle">+0.68%</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Monthly trend</div>
+            <div class="card-sub">Interest accrued by month</div>
+          </div>
+          <span class="tag lime">Above plan</span>
+        </div>
+        <svg viewBox="0 0 360 240" style="width:100%; height:240px; margin-top:6px;">
+          <g font-family="JetBrains Mono" font-size="9" fill="oklch(0.58 0.015 260)">
+            <text x="0" y="230">J</text><text x="40" y="230">F</text><text x="80" y="230">M</text><text x="120" y="230">A</text>
+            <text x="160" y="230">M</text><text x="200" y="230">J</text><text x="240" y="230">J</text><text x="280" y="230">A</text>
+            <text x="320" y="230">S</text>
+          </g>
+          <g>
+            <rect x="0" y="140" width="22" height="75" rx="4" fill="oklch(0.74 0.12 235 / 0.5)"/>
+            <rect x="40" y="120" width="22" height="95" rx="4" fill="oklch(0.74 0.12 235 / 0.55)"/>
+            <rect x="80" y="130" width="22" height="85" rx="4" fill="oklch(0.74 0.12 235 / 0.55)"/>
+            <rect x="120" y="100" width="22" height="115" rx="4" fill="oklch(0.74 0.12 235 / 0.6)"/>
+            <rect x="160" y="90" width="22" height="125" rx="4" fill="oklch(0.74 0.12 235 / 0.65)"/>
+            <rect x="200" y="72" width="22" height="143" rx="4" fill="oklch(0.88 0.18 130 / 0.75)"/>
+            <rect x="240" y="58" width="22" height="157" rx="4" fill="oklch(0.88 0.18 130 / 0.85)"/>
+            <rect x="280" y="44" width="22" height="171" rx="4" fill="oklch(0.88 0.18 130)"/>
+            <rect x="320" y="80" width="22" height="135" rx="4" fill="oklch(1 0 0 / 0.12)" stroke="oklch(0.88 0.18 130)" stroke-dasharray="2 2"/>
+          </g>
+          <text x="342" y="72" font-family="JetBrains Mono" font-size="9" fill="oklch(0.88 0.18 130)" text-anchor="end">proj</text>
+        </svg>
+        <div style="display:flex; justify-content:space-between; padding-top:12px; border-top:1px dashed var(--hair); font-size:11.5px;">
+          <div><span style="color:var(--ink-3);">Avg/mo</span> <span class="num" style="margin-left:6px;">₹ 28,450</span></div>
+          <div><span style="color:var(--ink-3);">Best</span> <span class="num" style="margin-left:6px; color:var(--lime);">₹ 34,100</span></div>
+        </div>
+      </div>
+
+      <div class="card span-8">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Bank comparison · partner FDs</div>
+            <div class="card-sub">Live yields across tenures · 12h refresh</div>
+          </div>
+          <span class="tag">Filter: Moderate · 18 mo</span>
+        </div>
+        <table class="banks">
+          <thead>
+            <tr><th>Bank</th><th>Rating</th><th class="num">1 yr</th><th class="num">18 mo</th><th class="num">3 yr</th><th class="num">5 yr</th><th>Trend</th><th class="num">DICGC</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="bank-cell"><div class="bank-logo" style="background:oklch(0.88 0.18 130);">B</div><div><div>Bajaj Finance</div><div style="font-size:10.5px; color:var(--ink-4);">NBFC</div></div></div></td>
+              <td><span class="rating-stars"><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span></span> <span style="font-size:10.5px; color:var(--ink-3); margin-left:6px;">AAA</span></td>
+              <td class="num">8.10%</td><td class="num" style="color:var(--lime);">8.35%</td><td class="num">8.20%</td><td class="num">8.00%</td>
+              <td><svg class="sparkline" viewBox="0 0 90 26"><path d="M0 18 L15 16 L30 19 L45 14 L60 10 L75 8 L90 4" stroke="oklch(0.88 0.18 130)" stroke-width="1.4" fill="none"/></svg></td>
+              <td class="num"><span class="tag lime" style="padding:2px 6px;">✓</span></td>
+            </tr>
+            <tr>
+              <td><div class="bank-cell"><div class="bank-logo" style="background:oklch(0.74 0.12 235);">S</div><div><div>Suryoday SFB</div><div style="font-size:10.5px; color:var(--ink-4);">Small-finance</div></div></div></td>
+              <td><span class="rating-stars"><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st off"></span></span> <span style="font-size:10.5px; color:var(--ink-3); margin-left:6px;">AA+</span></td>
+              <td class="num">7.75%</td><td class="num" style="color:var(--lime);">8.25%</td><td class="num">7.90%</td><td class="num">7.70%</td>
+              <td><svg class="sparkline" viewBox="0 0 90 26"><path d="M0 14 L15 18 L30 15 L45 12 L60 14 L75 11 L90 9" stroke="oklch(0.74 0.12 235)" stroke-width="1.4" fill="none"/></svg></td>
+              <td class="num"><span class="tag lime" style="padding:2px 6px;">✓</span></td>
+            </tr>
+            <tr>
+              <td><div class="bank-cell"><div class="bank-logo" style="background:oklch(0.74 0.14 300);">S</div><div><div>Shriram Finance</div><div style="font-size:10.5px; color:var(--ink-4);">NBFC</div></div></div></td>
+              <td><span class="rating-stars"><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st off"></span></span> <span style="font-size:10.5px; color:var(--ink-3); margin-left:6px;">AA+</span></td>
+              <td class="num">8.05%</td><td class="num" style="color:var(--lime);">8.30%</td><td class="num">8.15%</td><td class="num">7.95%</td>
+              <td><svg class="sparkline" viewBox="0 0 90 26"><path d="M0 10 L15 12 L30 11 L45 15 L60 17 L75 16 L90 18" stroke="oklch(0.74 0.14 300)" stroke-width="1.4" fill="none"/></svg></td>
+              <td class="num"><span class="tag lime" style="padding:2px 6px;">✓</span></td>
+            </tr>
+            <tr>
+              <td><div class="bank-cell"><div class="bank-logo" style="background:oklch(0.82 0.14 78);">U</div><div><div>Unity SFB</div><div style="font-size:10.5px; color:var(--ink-4);">Small-finance</div></div></div></td>
+              <td><span class="rating-stars"><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st off"></span></span> <span style="font-size:10.5px; color:var(--ink-3); margin-left:6px;">AA+</span></td>
+              <td class="num">7.65%</td><td class="num" style="color:var(--lime);">8.15%</td><td class="num">7.85%</td><td class="num">7.60%</td>
+              <td><svg class="sparkline" viewBox="0 0 90 26"><path d="M0 20 L15 17 L30 13 L45 15 L60 10 L75 7 L90 5" stroke="oklch(0.82 0.14 78)" stroke-width="1.4" fill="none"/></svg></td>
+              <td class="num"><span class="tag lime" style="padding:2px 6px;">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Maturity timeline</div>
+            <div class="card-sub">Next 36 months · auto-laddered</div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:6px;">
+          <div style="display:grid; grid-template-columns:14px 64px 1fr auto; gap:10px; align-items:center; padding:12px; border-radius:12px; background:oklch(1 0 0 / 0.02); border:1px solid var(--hair);">
+            <span style="width:10px; height:10px; border-radius:50%; background:var(--amber); box-shadow:0 0 10px var(--amber);"></span>
+            <span class="num" style="font-size:11.5px; color:var(--ink-3);">JAN '27</span>
+            <div><div style="font-size:13px;">Bajaj Finance · 12 mo</div><div style="font-size:11px; color:var(--ink-4);">Matures first · ₹6.25 L</div></div>
+            <span class="tag amber">Soon</span>
+          </div>
+          <div style="display:grid; grid-template-columns:14px 64px 1fr auto; gap:10px; align-items:center; padding:12px; border-radius:12px; background:oklch(1 0 0 / 0.02); border:1px solid var(--hair);">
+            <span style="width:10px; height:10px; border-radius:50%; background:var(--blue);"></span>
+            <span class="num" style="font-size:11.5px; color:var(--ink-3);">OCT '27</span>
+            <div><div style="font-size:13px;">Suryoday SFB · 18 mo</div><div style="font-size:11px; color:var(--ink-4);">₹6.25 L</div></div>
+            <span class="tag blue">Laddered</span>
+          </div>
+          <div style="display:grid; grid-template-columns:14px 64px 1fr auto; gap:10px; align-items:center; padding:12px; border-radius:12px; background:oklch(1 0 0 / 0.02); border:1px solid var(--hair);">
+            <span style="width:10px; height:10px; border-radius:50%; background:var(--lime);"></span>
+            <span class="num" style="font-size:11.5px; color:var(--ink-3);">APR '28</span>
+            <div><div style="font-size:13px;">Shriram Finance · 24 mo · anchor</div><div style="font-size:11px; color:var(--ink-4);">₹6.25 L</div></div>
+            <span class="tag lime">Largest</span>
+          </div>
+          <div style="display:grid; grid-template-columns:14px 64px 1fr auto; gap:10px; align-items:center; padding:12px; border-radius:12px; background:oklch(1 0 0 / 0.02); border:1px solid var(--hair);">
+            <span style="width:10px; height:10px; border-radius:50%; background:oklch(0.74 0.14 300);"></span>
+            <span class="num" style="font-size:11.5px; color:var(--ink-3);">APR '29</span>
+            <div><div style="font-size:13px;">Unity SFB · 36 mo</div><div style="font-size:11px; color:var(--ink-4);">₹6.25 L</div></div>
+            <span class="tag">Long</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>fintech · Built on <b style="color:var(--ink);">Blostem</b> partner rails · © 2026</div>
+    <div style="display:flex; gap:18px;">
+      <span>Terms</span><span>Privacy</span><span>RBI · Sahamati compliant</span><span class="mono">v 1.2.0</span>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+const API_BASE = 'http://localhost:8001';
+
+// Load params from sessionStorage
+const params = JSON.parse(sessionStorage.getItem('optimizeParams') || 'null');
+const result = JSON.parse(sessionStorage.getItem('optimizeResult') || 'null');
+
+// Bank data (synced with Portfolio.html)
+const BANK_DATA = {
+  conservative: [
+    { name: 'Suryoday SFB', type: 'Small-finance', rating: 'AA+', r1: 7.75, r18: 8.10, r3: 7.90, r5: 7.70, trend: 'up' },
+    { name: 'Unity SFB',    type: 'Small-finance', rating: 'AA+', r1: 7.65, r18: 8.15, r3: 7.85, r5: 7.60, trend: 'up' },
+    { name: 'Shivalik SFB', type: 'Small-finance', rating: 'AA',  r1: 7.50, r18: 8.00, r3: 7.75, r5: 7.50, trend: 'flat' },
+    { name: 'Jana SFB',     type: 'Small-finance', rating: 'AA',  r1: 7.40, r18: 7.90, r3: 7.65, r5: 7.40, trend: 'down' },
+  ],
+  moderate: [
+    { name: 'Bajaj Finance',   type: 'NBFC',          rating: 'AAA', r1: 8.10, r18: 8.35, r3: 8.20, r5: 8.00, trend: 'up' },
+    { name: 'Suryoday SFB',    type: 'Small-finance',  rating: 'AA+', r1: 7.75, r18: 8.25, r3: 7.90, r5: 7.70, trend: 'up' },
+    { name: 'Shriram Finance', type: 'NBFC',            rating: 'AA+', r1: 8.05, r18: 8.30, r3: 8.15, r5: 7.95, trend: 'up' },
+    { name: 'Unity SFB',       type: 'Small-finance',  rating: 'AA+', r1: 7.65, r18: 8.15, r3: 7.85, r5: 7.60, trend: 'flat' },
+  ],
+  aggressive: [
+    { name: 'Bajaj Finance',    type: 'NBFC', rating: 'AAA', r1: 8.10, r18: 8.35, r3: 8.20, r5: 8.00, trend: 'up' },
+    { name: 'Shriram Finance',  type: 'NBFC', rating: 'AA+', r1: 8.05, r18: 8.30, r3: 8.15, r5: 7.95, trend: 'up' },
+    { name: 'Mahindra Finance', type: 'NBFC', rating: 'AA+', r1: 7.95, r18: 8.20, r3: 8.05, r5: 7.85, trend: 'flat' },
+  ],
+};
+
+const risk = params?.risk || 'moderate';
+const amount = params?.amount || 2500000;
+const banks = BANK_DATA[risk];
+
+const colors = [
+  'oklch(0.88 0.18 130)',
+  'oklch(0.74 0.12 235)',
+  'oklch(0.74 0.14 300)',
+  'oklch(0.82 0.14 78)',
+  'oklch(0.72 0.16 20)'
+];
+
+const fmtINR = n => '₹ ' + Math.round(n).toLocaleString('en-IN');
+
+// --- Update bank comparison table ---
+function updateBankTable() {
+  const tbody = document.querySelector('.banks tbody');
+  if (!tbody) return;
+
+  const starsFull = '<span class="rating-stars">' + '<span class="st"></span>'.repeat(5) + '</span>';
+  const stars4 = '<span class="rating-stars">' + '<span class="st"></span>'.repeat(4) + '<span class="st off"></span>' + '</span>';
+  const stars3 = '<span class="rating-stars">' + '<span class="st"></span>'.repeat(3) + '<span class="st off"></span>'.repeat(2) + '</span>';
+
+  function getStars(rating) {
+    if (rating === 'AAA') return starsFull;
+    if (rating === 'AA+') return stars4;
+    return stars3;
+  }
+
+  function sparkPath(trend) {
+    if (trend === 'up')   return 'M0 20 L15 17 L30 13 L45 11 L60 8 L75 5 L90 3';
+    if (trend === 'down') return 'M0 5 L15 8 L30 11 L45 13 L60 15 L75 17 L90 20';
+    return 'M0 12 L15 11 L30 13 L45 10 L60 12 L75 11 L90 11';
+  }
+
+  tbody.innerHTML = banks.map((b, i) => {
+    const maxRate = Math.max(b.r1, b.r18, b.r3, b.r5);
+    return `<tr>
+      <td><div class="bank-cell"><div class="bank-logo" style="background:${colors[i]};">${b.name.charAt(0)}</div>
+        <div><div>${b.name}</div><div style="font-size:10.5px;color:var(--ink-4);">${b.type}</div></div></div></td>
+      <td>${getStars(b.rating)} <span style="font-size:10.5px;color:var(--ink-3);margin-left:6px;">${b.rating}</span></td>
+      <td class="num" ${b.r1 === maxRate ? 'style="color:var(--lime);"' : ''}>${b.r1}%</td>
+      <td class="num" ${b.r18 === maxRate ? 'style="color:var(--lime);"' : ''}>${b.r18}%</td>
+      <td class="num" ${b.r3 === maxRate ? 'style="color:var(--lime);"' : ''}>${b.r3}%</td>
+      <td class="num" ${b.r5 === maxRate ? 'style="color:var(--lime);"' : ''}>${b.r5}%</td>
+      <td><svg class="sparkline" viewBox="0 0 90 26">
+        <path d="${sparkPath(b.trend)}" stroke="${colors[i]}" stroke-width="1.4" fill="none"/>
+      </svg></td>
+      <td class="num"><span class="tag lime" style="padding:2px 6px;">✔</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// --- Update portfolio value & trend card ---
+function updateTrendCard() {
+  const blended = banks.reduce((s, b) => {
+    const allocs = { conservative: [40,30,20,10], moderate: [25,25,25,25], aggressive: [40,35,25] };
+    const pcts = allocs[risk] || [25,25,25,25];
+    return s + b.r18 * (pcts[banks.indexOf(b)] || 0) / 100;
+  }, 0);
+
+  const grossReturn = amount * blended / 100;
+  const portfolioValue = amount + grossReturn;
+
+  // Update trend val
+  const trendVal = document.querySelector('.trend-val');
+  if (trendVal) trendVal.textContent = fmtINR(portfolioValue);
+
+  const trendDelta = document.querySelector('.trend-delta');
+  if (trendDelta) trendDelta.textContent = '↗ +' + fmtINR(grossReturn) + ' YTD · +' + blended.toFixed(2) + '%';
+
+  // Update data-pill
+  document.body.setAttribute('data-pill', "<span class='ind'></span> YTD · +" + blended.toFixed(2) + "%");
+}
+
+// --- Update maturity timeline ---
+function updateTimeline() {
+  const allocs = { conservative: [40,30,20,10], moderate: [25,25,25,25], aggressive: [40,35,25] };
+  const pcts = allocs[risk] || [25,25,25,25];
+  const mos = { conservative: [12,18,24,36], moderate: [12,18,24,36], aggressive: [9,18,36] };
+  const moList = mos[risk] || [12,18,24,36];
+
+  const now = new Date();
+  const timelineDiv = document.querySelector('.card.span-4 > div[style*="flex-direction:column"]');
+  if (!timelineDiv) return;
+
+  const tagColors = ['amber', 'blue', 'lime', '', 'rose'];
+  const tagLabels = ['Soon', 'Laddered', 'Largest', 'Hold', 'Long'];
+
+  timelineDiv.innerHTML = banks.map((b, i) => {
+    const matDate = new Date(now);
+    matDate.setMonth(matDate.getMonth() + moList[i]);
+    const dateStr = matDate.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' }).toUpperCase();
+    const matAmt = amount * pcts[i] / 100;
+    const matVal = matAmt * (1 + b.r18 / 100 * moList[i] / 12);
+
+    return `<div style="display:grid;grid-template-columns:14px 64px 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:12px;background:oklch(1 0 0 / 0.02);border:1px solid var(--hair);">
+      <span style="width:10px;height:10px;border-radius:50%;background:${colors[i]};${i===0?'box-shadow:0 0 10px '+colors[i]+';':''}"></span>
+      <span class="num" style="font-size:11.5px;color:var(--ink-3);">${dateStr}</span>
+      <div><div style="font-size:13px;">${b.name} · ${moList[i]} mo</div>
+        <div style="font-size:11px;color:var(--ink-4);">${fmtINR(matVal)}</div></div>
+      <span class="tag ${tagColors[i] || ''}">${tagLabels[i] || ''}</span>
+    </div>`;
+  }).join('');
+}
+
+// Run all updates
+updateBankTable();
+updateTrendCard();
+updateTimeline();
+</script>
+</body>
+</html>

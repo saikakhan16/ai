@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Optimizer · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+</head>
+<body data-page="optimizer" data-crumb="Optimizer" data-pill="<span class='ind'></span> Auto-save · Live preview">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Optimizer Input">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow"><span class="tick"></span> Step 01 · Your inputs</div>
+        <h2 class="screen-title">Tell the optimizer <em>who you are</em><br/>as a depositor.</h2>
+      </div>
+      <div class="screen-desc">
+        Inputs power both agents. The Bank Selection Agent uses your risk profile and tenure to pick issuers; the Rate Decision Agent uses tax bracket and liquidity to decide <b>book now</b> vs <b>wait</b>.
+      </div>
+    </div>
+
+    <div class="input-grid">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Optimizer parameters</div>
+            <div class="card-sub">Live — changes re-run both agents in ~400ms</div>
+          </div>
+          <span class="tag lime"><span style="width:6px;height:6px;border-radius:50%;background:var(--lime);display:inline-block;"></span> Auto-save</span>
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <label>Investment amount <span class="hint">Min ₹50,000</span></label>
+            <div class="bigval"><span class="cur">₹</span>25,00,000 <span class="cur mono" style="font-size:13px; margin-left:auto;">Twenty-five lakh</span></div>
+            <div class="slider"><div class="fill" style="width:60%"></div><div class="knob" style="left:60%"></div></div>
+            <div class="slider-ticks"><span>50K</span><span>10L</span><span>25L</span><span>50L</span><span>1Cr+</span></div>
+          </div>
+
+          <div class="field">
+            <label>Risk profile <span class="hint">Determines bank diversification</span></label>
+            <div class="seg">
+              <button><span class="lbl">Conservative</span><span class="des">AAA only · 2 banks</span></button>
+              <button class="on"><span class="lbl">Moderate</span><span class="des">AA+/AAA · 5 banks</span></button>
+              <button><span class="lbl">Aggressive</span><span class="des">AA+ · small-fin allowed</span></button>
+            </div>
+          </div>
+
+          <div class="field half">
+            <label>Tenure <span class="hint">Laddered automatically</span></label>
+            <div class="tenure-row">
+              <div class="tenure-chip">6 <span class="u">mo</span></div>
+              <div class="tenure-chip">12 <span class="u">mo</span></div>
+              <div class="tenure-chip on">18 <span class="u">mo</span></div>
+              <div class="tenure-chip">24 <span class="u">mo</span></div>
+              <div class="tenure-chip">36 <span class="u">mo</span></div>
+              <div class="tenure-chip">60 <span class="u">mo</span></div>
+            </div>
+          </div>
+
+          <div class="field half">
+            <label>Tax bracket <span class="hint">For post-tax yield</span></label>
+            <div class="seg">
+              <button><span class="lbl">5%</span></button>
+              <button><span class="lbl">10%</span></button>
+              <button><span class="lbl">20%</span></button>
+              <button class="on"><span class="lbl">30%</span></button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Liquidity preference <span class="hint">Share of corpus redeemable within 90 days</span></label>
+            <div class="bigval" style="font-size:22px;">20% <span class="cur" style="font-size:13px;">· ₹ 5,00,000 quick-access</span><span class="cur mono" style="font-size:12px; margin-left:auto; color:var(--ink-4);">0 — 100%</span></div>
+            <div class="slider"><div class="fill" style="width:20%"></div><div class="knob" style="left:20%"></div></div>
+            <div class="slider-ticks"><span>Locked</span><span>10</span><span>20</span><span>40</span><span>Flexible</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <button class="btn primary" id="runBtn" onclick="runOptimizer()">Run optimizer
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button class="btn">Save scenario</button>
+          <button class="btn ghost" style="margin-left:auto; color:var(--ink-3);" onclick="resetDefaults()">Reset defaults</button>
+        </div>
+        <div id="apiError" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; background:oklch(0.72 0.16 20 / 0.1); border:1px solid oklch(0.72 0.16 20 / 0.3); font-size:12.5px; color:oklch(0.72 0.16 20);">
+          ⚠️ <span id="apiErrorMsg"></span>
+        </div>
+      </div>
+
+      <div class="preview">
+        <div class="card-head" style="position:relative;">
+          <div>
+            <div class="card-title">Projected outcome</div>
+            <div class="card-sub">Moderate · 18 mo · 30% bracket</div>
+          </div>
+          <span class="tag blue">preview</span>
+        </div>
+
+        <div>
+          <div style="font-size:11px; color:var(--ink-3); letter-spacing:0.08em; text-transform:uppercase;">Blended yield (pre-tax)</div>
+          <div class="big">7.58%</div>
+          <div class="big-sub">5.30% post-tax · vs 6.40% single-bank benchmark</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row"><span class="k">Annual returns (gross)</span><span class="v">₹ 1,89,500</span></div>
+        <div class="row"><span class="k">Post-tax returns</span><span class="v">₹ 1,32,650</span></div>
+        <div class="row"><span class="k">Maturity value</span><span class="v">₹ 27,89,500</span></div>
+        <div class="row"><span class="k">DICGC coverage</span><span class="v" style="color:var(--lime);">100% · ₹25 L insured</span></div>
+        <div class="row"><span class="k">TDS avoided (15G)</span><span class="v" style="color:var(--amber);">₹ 13,250</span></div>
+
+        <div class="divider"></div>
+        <div style="font-size:11.5px; color:var(--ink-3); line-height:1.5;">
+          Figures update as you change inputs. Final rates locked at the moment of booking via Blostem's integrated partner APIs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>fintech · Built on <b style="color:var(--ink);">Blostem</b> partner rails · © 2026</div>
+    <div style="display:flex; gap:18px;">
+      <span>Terms</span><span>Privacy</span><span>RBI · Sahamati compliant</span><span class="mono">v 1.2.0</span>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+const API_BASE = 'http://localhost:8001';
+
+// State
+let state = {
+  amount: 2500000,
+  risk: 'moderate',
+  tenure: 18,
+  tax: 30,
+  liquidity: 20
+};
+
+// Amount slider values
+const amountSteps = [50000, 500000, 1000000, 2500000, 5000000, 10000000];
+let amountIdx = 3;
+
+function formatAmount(n) {
+  if (n >= 10000000) return (n/10000000).toFixed(1) + ' Cr';
+  if (n >= 100000) return (n/100000).toFixed(1) + ' L';
+  return (n/1000).toFixed(0) + 'K';
+}
+
+function formatAmountWords(n) {
+  if (n >= 10000000) return (n/10000000).toFixed(1) + ' crore';
+  if (n >= 100000) return (n/100000).toFixed(0) + ' lakh';
+  return (n/1000).toFixed(0) + ' thousand';
+}
+
+// Risk buttons
+document.querySelectorAll('.field .seg')[0]?.querySelectorAll('button').forEach((btn, i) => {
+  const risks = ['conservative', 'moderate', 'aggressive'];
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.field .seg')[0].querySelectorAll('button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    state.risk = risks[i];
+    updatePreview();
+  });
+});
+
+// Tenure chips
+document.querySelectorAll('.tenure-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.tenure-chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    state.tenure = parseInt(chip.textContent);
+    updatePreview();
+  });
+});
+
+// Tax buttons
+document.querySelectorAll('.field .seg')[1]?.querySelectorAll('button').forEach((btn, i) => {
+  const taxes = [5, 10, 20, 30];
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.field .seg')[1].querySelectorAll('button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    state.tax = taxes[i];
+    updatePreview();
+  });
+});
+
+function updatePreview() {
+  const avgRate = state.risk === 'conservative' ? 7.85 : state.risk === 'aggressive' ? 8.26 : 8.26;
+  const gross = state.amount * (avgRate / 100);
+  const postTax = gross * (1 - state.tax / 100);
+  const maturity = state.amount + gross;
+
+  document.querySelector('.big').textContent = avgRate.toFixed(2) + '%';
+  document.querySelector('.big-sub').textContent = (avgRate * (1 - state.tax/100)).toFixed(2) + '% post-tax · vs 6.40% single-bank benchmark';
+  const rows = document.querySelectorAll('.row .v');
+  if (rows[0]) rows[0].textContent = '₹ ' + Math.round(gross).toLocaleString('en-IN');
+  if (rows[1]) rows[1].textContent = '₹ ' + Math.round(postTax).toLocaleString('en-IN');
+  if (rows[2]) rows[2].textContent = '₹ ' + Math.round(maturity).toLocaleString('en-IN');
+  if (rows[3]) rows[3].textContent = '100% · ₹' + formatAmount(state.amount) + ' insured';
+
+  document.querySelector('.card-sub') && (document.querySelectorAll('.card-sub')[1].textContent =
+    state.risk.charAt(0).toUpperCase() + state.risk.slice(1) + ' · ' + state.tenure + ' mo · ' + state.tax + '% bracket');
+}
+
+async function runOptimizer() {
+  const btn = document.getElementById('runBtn');
+  const errDiv = document.getElementById('apiError');
+  const errMsg = document.getElementById('apiErrorMsg');
+
+  btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--lime);animation:pulse 1s infinite;"></span> PSO agents running…</span>';
+  btn.disabled = true;
+  errDiv.style.display = 'none';
+
+  try {
+    const res = await fetch(API_BASE + '/optimize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: state.amount,
+        risk_profile: state.risk,
+        tenure_months: state.tenure,
+        name: 'Investor'
+      })
+    });
+
+    if (!res.ok) throw new Error('Server error: ' + res.status);
+    const data = await res.json();
+
+    if (data.success) {
+      // Save to sessionStorage for Portfolio.html
+      sessionStorage.setItem('optimizeResult', JSON.stringify(data));
+      sessionStorage.setItem('optimizeParams', JSON.stringify(state));
+      window.location.href = 'Portfolio.html';
+    } else {
+      throw new Error(data.error || 'Optimization failed');
+    }
+  } catch (e) {
+    errMsg.textContent = e.message.includes('fetch') ? 'Backend not reachable. Is localhost:8001 running?' : e.message;
+    errDiv.style.display = 'block';
+    btn.innerHTML = 'Run optimizer <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    btn.disabled = false;
+  }
+}
+
+function resetDefaults() {
+  state = { amount: 2500000, risk: 'moderate', tenure: 18, tax: 30, liquidity: 20 };
+  setSliderPos(document.querySelectorAll('.slider')[0], 60);
+  setSliderPos(document.querySelectorAll('.slider')[1], 20);
+  updateAmountDisplay();
+  updateLiquidityDisplay();
+  updatePreview();
+}
+
+// --- Slider helpers ---
+function setSliderPos(sliderEl, pct) {
+  sliderEl.querySelector('.fill').style.width = pct + '%';
+  sliderEl.querySelector('.knob').style.left = pct + '%';
+}
+
+function makeSlider(sliderEl, onDrag) {
+  let dragging = false;
+  function getPct(e) {
+    const rect = sliderEl.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    return Math.max(0, Math.min(1, x / rect.width));
+  }
+  sliderEl.addEventListener('mousedown', e => { dragging = true; onDrag(getPct(e)); e.preventDefault(); });
+  document.addEventListener('mousemove', e => { if (dragging) onDrag(getPct(e)); });
+  document.addEventListener('mouseup', () => dragging = false);
+  sliderEl.addEventListener('touchstart', e => { dragging = true; onDrag(getPct(e)); }, { passive: true });
+  document.addEventListener('touchmove', e => { if (dragging) onDrag(getPct(e.touches[0])); }, { passive: true });
+  document.addEventListener('touchend', () => dragging = false);
+}
+
+function updateAmountDisplay() {
+  const n = state.amount;
+  const formatted = n.toLocaleString('en-IN');
+  const words = formatAmountWords(n);
+  const wordsCap = words.charAt(0).toUpperCase() + words.slice(1);
+  document.querySelector('.bigval').innerHTML =
+    `<span class="cur">₹</span>${formatted} <span class="cur mono" style="font-size:13px; margin-left:auto;">${wordsCap}</span>`;
+}
+
+function updateLiquidityDisplay() {
+  const liquidityAmt = Math.round(state.amount * state.liquidity / 100);
+  document.querySelectorAll('.bigval')[1].innerHTML =
+    `${state.liquidity}% <span class="cur" style="font-size:13px;">· ₹ ${liquidityAmt.toLocaleString('en-IN')} quick-access</span>` +
+    `<span class="cur mono" style="font-size:12px; margin-left:auto; color:var(--ink-4);">0 — 100%</span>`;
+}
+
+// Amount slider — snaps to 6 steps
+makeSlider(document.querySelectorAll('.slider')[0], pct => {
+  amountIdx = Math.max(0, Math.min(amountSteps.length - 1, Math.round(pct * (amountSteps.length - 1))));
+  state.amount = amountSteps[amountIdx];
+  const snapPct = amountIdx / (amountSteps.length - 1) * 100;
+  setSliderPos(document.querySelectorAll('.slider')[0], snapPct);
+  updateAmountDisplay();
+  updateLiquidityDisplay();
+  updatePreview();
+});
+
+// Liquidity slider — 0–100%
+makeSlider(document.querySelectorAll('.slider')[1], pct => {
+  state.liquidity = Math.round(pct * 100);
+  setSliderPos(document.querySelectorAll('.slider')[1], state.liquidity);
+  updateLiquidityDisplay();
+  updatePreview();
+});
+
+// Fix initial slider position to match amountIdx=3 (index 3 of 5 = 60%)
+setSliderPos(document.querySelectorAll('.slider')[0], 60);
+
+updatePreview();
+</script>
+</body>
+</html>

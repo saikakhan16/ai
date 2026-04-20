@@ -1,12 +1,22 @@
 """
 FD Portfolio Optimizer — Vercel Serverless Handler (Minimal & Robust)
 """
-from fastapi import FastAPI, HTTPException
+import sys, os, json
+
+# Import real PSO algorithm
+try:
+    _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0, os.path.join(_root, 'fd_agents'))
+    from agents.pso_optimizer import _run_pso_optimization
+    PSO_AVAILABLE = True
+except Exception:
+    PSO_AVAILABLE = False
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from datetime import datetime
-import json
 
 # ────────────────────────────────────────────────────────────────────
 
@@ -135,49 +145,68 @@ async def health_check():
 
 @app.post("/optimize")
 async def optimize_portfolio(request: OptimizeRequest):
-    """Portfolio optimization endpoint"""
+    """Portfolio optimization — runs real PSO algorithm (60 particles × 200 iterations)"""
     try:
-        # Simple allocation logic
-        allocation = {
-            "Bajaj Finance": request.amount * 0.25,
-            "Suryoday SFB": request.amount * 0.25,
-            "Shriram Finance": request.amount * 0.25,
-            "Unity SFB": request.amount * 0.25,
+        if PSO_AVAILABLE:
+            params = json.dumps({
+                "total_amount": request.amount,
+                "risk_profile": request.risk_profile,
+                "tenure_months": request.tenure_months
+            })
+            pso_data = json.loads(_run_pso_optimization(params))
+            allocation = [a for a in pso_data["allocation"] if a["weight_percent"] > 3]
+            return {
+                "success": True,
+                "allocation": allocation,
+                "summary": pso_data["summary"],
+                "ladder": pso_data.get("ladder_strategy", []),
+                "pso": True,
+                "timestamp": datetime.now().isoformat(),
+                "request_params": request.dict()
+            }
+
+        # Fallback (no PSO)
+        fallback = {
+            "conservative": [
+                {"bank_name":"Suryoday SFB","rating":"AA+","weight_percent":40,"interest_rate":8.25,"dicgc_insured":True},
+                {"bank_name":"Unity SFB","rating":"AA+","weight_percent":30,"interest_rate":8.15,"dicgc_insured":True},
+                {"bank_name":"Shivalik SFB","rating":"AA","weight_percent":20,"interest_rate":8.00,"dicgc_insured":True},
+                {"bank_name":"Jana SFB","rating":"AA","weight_percent":10,"interest_rate":7.90,"dicgc_insured":True},
+            ],
+            "moderate": [
+                {"bank_name":"Bajaj Finance","rating":"AAA","weight_percent":25,"interest_rate":8.35,"dicgc_insured":False},
+                {"bank_name":"Suryoday SFB","rating":"AA+","weight_percent":25,"interest_rate":8.25,"dicgc_insured":True},
+                {"bank_name":"Shriram Finance","rating":"AA+","weight_percent":25,"interest_rate":8.30,"dicgc_insured":False},
+                {"bank_name":"Unity SFB","rating":"AA+","weight_percent":25,"interest_rate":8.15,"dicgc_insured":True},
+            ],
+            "aggressive": [
+                {"bank_name":"Bajaj Finance","rating":"AAA","weight_percent":40,"interest_rate":8.35,"dicgc_insured":False},
+                {"bank_name":"Shriram Finance","rating":"AA+","weight_percent":35,"interest_rate":8.30,"dicgc_insured":False},
+                {"bank_name":"Mahindra Finance","rating":"AA+","weight_percent":25,"interest_rate":8.20,"dicgc_insured":False},
+            ],
         }
-        
-        # Simple return calculation
-        avg_rate = 8.25
-        annual_return = request.amount * (avg_rate / 100)
-        
-        report = f"""
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px;">
-            <h3>📋 Portfolio Optimization Report</h3>
-            <p><strong>Investor:</strong> {request.name}</p>
-            <p><strong>Investment Amount:</strong> ₹{request.amount:,.0f}</p>
-            <p><strong>Risk Profile:</strong> {request.risk_profile.upper()}</p>
-            <p><strong>Tenure:</strong> {request.tenure_months} months</p>
-            <p><strong>Expected Annual Return:</strong> ₹{annual_return:,.0f}</p>
-            <p><strong>Allocation Strategy:</strong> Equally distributed across 4 institutions</p>
-        </div>
-        """
-        
-        return OptimizeResponse(
-            success=True,
-            report=report,
-            bank_recommendation=get_bank_recommendation(request.risk_profile, request.tenure_months),
-            rate_decision=get_rate_decision(request.tenure_months),
-            timestamp=datetime.now().isoformat(),
-            request_params=request.dict()
-        )
-    
+        alloc = fallback.get(request.risk_profile, fallback["moderate"])
+        blended = sum(a["weight_percent"] * a["interest_rate"] / 100 for a in alloc)
+        gross = request.amount * blended / 100
+        return {
+            "success": True,
+            "allocation": alloc,
+            "summary": {
+                "total_investment": request.amount,
+                "total_interest_earned": round(gross, 2),
+                "total_maturity_amount": round(request.amount + gross, 2),
+                "expected_annual_return_pct": round(blended, 2),
+                "tenure_months": request.tenure_months,
+                "risk_profile": request.risk_profile,
+            },
+            "ladder": [],
+            "pso": False,
+            "timestamp": datetime.now().isoformat(),
+            "request_params": request.dict()
+        }
+
     except Exception as e:
-        return OptimizeResponse(
-            success=False,
-            report="Optimization failed",
-            timestamp=datetime.now().isoformat(),
-            request_params=request.dict(),
-            error=str(e)
-        )
+        return {"success": False, "error": str(e), "timestamp": datetime.now().isoformat(), "request_params": request.dict()}
 
 
 @app.get("/")

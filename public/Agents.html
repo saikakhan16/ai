@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Agents · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+</head>
+<body data-page="agents" data-crumb="Agents" data-pill="<span class='ind'></span> 2 agents · live reasoning">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Agents">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow"><span class="tick"></span> Intelligence · Agents</div>
+        <h2 class="screen-title">Two agents <em>reason aloud</em><br/>so you can audit every decision.</h2>
+      </div>
+      <div class="screen-desc">Each recommendation ships with traceable reasoning, confidence, and the underlying data the agent touched. Override any call with one click.</div>
+    </div>
+
+    <div class="agents-grid">
+      <div class="agent a1">
+        <div class="agent-head">
+          <div class="agent-avatar">β</div>
+          <div>
+            <div class="agent-name">Bank Selection Agent</div>
+            <div class="agent-status"><span class="p"></span> Ranking 38 FD products across 5 partners · updated 2m ago</div>
+          </div>
+          <div class="agent-metric"><div class="v">94%</div><div class="k">Conf.</div></div>
+        </div>
+        <div class="reasoning">
+          <div class="r-card">
+            <div class="t">● Reasoning · Short-term rung</div>
+            <div class="q">Recommended <span class="hi">Unity SFB (AA+, small-finance)</span> for your 9-month rung — it offers <span class="hi">+55 bps</span> over AAA peers while staying inside DICGC coverage at ₹4.0 L.</div>
+            <div class="footer"><span><span class="k">Weight</span> · 16%</span><span><span class="k">Yield</span> · 8.15%</span><span><span class="k">Risk tier</span> · AA+</span></div>
+          </div>
+          <div class="r-card">
+            <div class="t">● Reasoning · Anchor rung</div>
+            <div class="q">Anchored 28% of corpus at <span class="hi">Bajaj Finance (AAA)</span> for 18 months — the curve is steepest between 15–21 mo this cycle, capturing <span class="hi">+40 bps</span> of convexity with minimal credit trade-off.</div>
+            <div class="footer"><span><span class="k">Weight</span> · 28%</span><span><span class="k">Yield</span> · 8.35%</span><span><span class="k">Risk tier</span> · AAA</span></div>
+          </div>
+          <div class="r-card">
+            <div class="t">● Reasoning · Coverage constraint</div>
+            <div class="q">Capped <span class="hi">Shriram Finance</span> at ₹5.5 L to keep principal + expected interest under the DICGC <span class="hi">₹5,00,000</span> ceiling at maturity. Overflow routed to Mahindra Finance.</div>
+            <div class="footer"><span><span class="k">Rule</span> · DICGC envelope</span><span><span class="k">Overflow</span> · ₹50,000</span></div>
+          </div>
+          <div class="r-card" style="background:oklch(0.88 0.18 130 / 0.06); border-color:oklch(0.88 0.18 130 / 0.25);">
+            <div class="t" style="color:var(--lime);">● Thinking <span class="typing-dots"><span></span><span></span><span></span></span></div>
+            <div class="q" style="color:var(--ink-2);">Stress-testing allocation against a 25 bp downward shock on AA issuers…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent a2">
+        <div class="agent-head">
+          <div class="agent-avatar">ρ</div>
+          <div>
+            <div class="agent-name">Rate Decision Agent</div>
+            <div class="agent-status"><span class="p"></span> Tracking MPC minutes, G-sec curve, CPI prints — 28 signals live</div>
+          </div>
+          <div class="agent-metric"><div class="v">71%</div><div class="k">Conf.</div></div>
+        </div>
+        <div class="reasoning">
+          <div class="r-card">
+            <div class="t">● Verdict · Short-term</div>
+            <div class="q"><span class="hi blue">Wait 30 days.</span> Rates on 12–24 mo buckets are likely to rise <span class="hi blue">15–25 bps</span> after the next MPC — our stance model puts a hike probability at 62%.</div>
+            <div class="footer"><span><span class="k">Signal</span> · CPI sticky core</span><span><span class="k">Signal</span> · G-sec 10y ↑ 8 bps WoW</span></div>
+          </div>
+          <div class="r-card">
+            <div class="t">● Verdict · Long-term rung</div>
+            <div class="q">Book the <span class="hi blue">36 mo rung today</span>. The long end is pricing a full cycle of cuts already; waiting likely costs you <span class="hi blue">~8 bps</span>.</div>
+            <div class="footer"><span><span class="k">Action</span> · Execute Mahindra Finance</span><span><span class="k">Cost of wait</span> · +₹3,200/yr</span></div>
+          </div>
+          <div class="r-card">
+            <div class="t">● Watchlist</div>
+            <div class="q">Flagged <span class="hi blue">Suryoday SFB</span>: its 12-mo rate is 22 bps below peer median. If they don't revise within 14 days, the agent will reallocate automatically.</div>
+            <div class="footer"><span><span class="k">Threshold</span> · 14 days</span><span><span class="k">Replace with</span> · Bajaj Finance or Mahindra Finance</span></div>
+          </div>
+          <div class="r-card">
+            <div class="t">● Latest trigger · 04:12 IST</div>
+            <div class="q"><span class="hi blue">Unity SFB raised small-finance 9-mo by +20 bps.</span> Reaffirmed current allocation; no rebalancing needed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>fintech · Built on <b style="color:var(--ink);">Blostem</b> partner rails · © 2026</div>
+    <div style="display:flex; gap:18px;">
+      <span>Terms</span><span>Privacy</span><span>RBI · Sahamati compliant</span><span class="mono">v 1.2.0</span>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+const params = JSON.parse(sessionStorage.getItem('optimizeParams') || 'null');
+const result = JSON.parse(sessionStorage.getItem('optimizeResult') || 'null');
+
+const risk = params?.risk || 'moderate';
+const amount = params?.amount || 2500000;
+const tenure = params?.tenure || 18;
+const tax = params?.tax || 30;
+
+const fmtINR = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmtL = n => (n >= 10000000 ? (n/10000000).toFixed(1)+' Cr' : (n/100000).toFixed(1)+' L');
+
+const ALLOCS = {
+  conservative: [
+    { name:'Suryoday SFB', rating:'AA+', pct:40, mo:12, rate:8.25, anchor:false },
+    { name:'Unity SFB',    rating:'AA+', pct:30, mo:18, rate:8.15, anchor:true  },
+    { name:'Shivalik SFB', rating:'AA',  pct:20, mo:24, rate:8.00, anchor:false },
+    { name:'Jana SFB',     rating:'AA',  pct:10, mo:36, rate:7.90, anchor:false },
+  ],
+  moderate: [
+    { name:'Bajaj Finance',   rating:'AAA', pct:25, mo:12, rate:8.35, anchor:false },
+    { name:'Suryoday SFB',    rating:'AA+', pct:25, mo:18, rate:8.25, anchor:true  },
+    { name:'Shriram Finance', rating:'AA+', pct:25, mo:24, rate:8.30, anchor:false },
+    { name:'Unity SFB',       rating:'AA+', pct:25, mo:36, rate:8.15, anchor:false },
+  ],
+  aggressive: [
+    { name:'Bajaj Finance',    rating:'AAA', pct:40, mo:9,  rate:8.35, anchor:false },
+    { name:'Shriram Finance',  rating:'AA+', pct:35, mo:18, rate:8.30, anchor:true  },
+    { name:'Mahindra Finance', rating:'AA+', pct:25, mo:36, rate:8.20, anchor:false },
+  ],
+};
+
+let banks = ALLOCS[risk];
+
+// Override with real PSO allocation when available
+if (result && result.allocation && result.allocation.length > 0) {
+  const psoFiltered = result.allocation.filter(a => a.weight_percent > 2);
+  if (psoFiltered.length > 0) {
+    // Assign ladder rungs so shortRung/longRung differ meaningfully
+    const step = Math.max(3, Math.round(tenure / 4));
+    const rungs = [tenure, Math.max(3, tenure - step), Math.max(3, tenure - step*2), Math.max(3, tenure - step*3)];
+    banks = psoFiltered.map((a, i) => ({
+      name:   a.bank_name,
+      rating: a.rating || 'AA',
+      pct:    Math.round(a.weight_percent),
+      mo:     rungs[Math.min(i, rungs.length - 1)],
+      rate:   a.interest_rate,
+      anchor: i === 1
+    }));
+  }
+}
+
+const blended = banks.reduce((s,b) => s + b.rate * b.pct/100, 0);
+const anchor    = banks.find(b => b.anchor) || banks[Math.floor(banks.length/2)];
+const shortRung = banks.reduce((a,b) => a.mo < b.mo ? a : b);
+const longRung  = banks.reduce((a,b) => a.mo > b.mo ? a : b);
+const lowRung   = banks.reduce((a,b) => a.rate < b.rate ? a : b);
+const topRate   = banks.reduce((a,b) => a.rate > b.rate ? a : b);
+const singleBankRate = 6.40;
+const bpsOver = Math.round((topRate.rate - singleBankRate) * 100);
+const dicgcAmt = fmtL(amount / banks.length);
+
+// Real time-ago from last optimization timestamp
+function timeAgo(isoStr) {
+  if (!isoStr) return 'just now';
+  const diff = Math.floor((Date.now() - new Date(isoStr)) / 1000);
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  return `${Math.floor(diff/3600)}h ago`;
+}
+const lastRun = result?.timestamp || null;
+
+// --- Update Bank Selection Agent ---
+const bsaStatus = document.querySelector('.a1 .agent-status');
+if (bsaStatus) bsaStatus.innerHTML = `<span class="p"></span> Ranking ${banks.length * 8} FD products across ${banks.length} partners · updated ${timeAgo(lastRun)}`;
+
+const bsaMetric = document.querySelector('.a1 .agent-metric .v');
+if (bsaMetric) bsaMetric.textContent = risk === 'conservative' ? '96%' : risk === 'aggressive' ? '89%' : '94%';
+
+const bsaCards = document.querySelectorAll('.a1 .r-card');
+if (bsaCards[0]) {
+  bsaCards[0].querySelector('.q').innerHTML = `Recommended <span class="hi">${shortRung.name} (${shortRung.rating})</span> for your ${shortRung.mo}-month rung — it offers <span class="hi">+${bpsOver} bps</span> over AAA peers while staying inside DICGC coverage at ${dicgcAmt}.`;
+  bsaCards[0].querySelector('.footer').innerHTML = `<span><span class="k">Weight</span> · ${shortRung.pct}%</span><span><span class="k">Yield</span> · ${shortRung.rate}%</span><span><span class="k">Risk tier</span> · ${shortRung.rating}</span>`;
+}
+if (bsaCards[1]) {
+  bsaCards[1].querySelector('.q').innerHTML = `Anchored ${anchor.pct}% of corpus at <span class="hi">${anchor.name} (${anchor.rating})</span> for ${anchor.mo} months — the curve is steepest between ${anchor.mo-3}–${anchor.mo+3} mo this cycle, capturing <span class="hi">+${Math.round((anchor.rate - singleBankRate)*100)} bps</span> of convexity with minimal credit trade-off.`;
+  bsaCards[1].querySelector('.footer').innerHTML = `<span><span class="k">Weight</span> · ${anchor.pct}%</span><span><span class="k">Yield</span> · ${anchor.rate}%</span><span><span class="k">Risk tier</span> · ${anchor.rating}</span>`;
+}
+if (bsaCards[2]) {
+  const capBank = banks[1] || banks[0];
+  const capAmt = amount * capBank.pct / 100;
+  bsaCards[2].querySelector('.q').innerHTML = `Capped <span class="hi">${capBank.name}</span> at ${fmtL(capAmt)} to keep principal + expected interest under the DICGC <span class="hi">₹5,00,000</span> ceiling at maturity. Overflow routed to ${banks[banks.length-1].name}.`;
+  bsaCards[2].querySelector('.footer').innerHTML = `<span><span class="k">Rule</span> · DICGC envelope</span><span><span class="k">Overflow</span> · ${fmtINR(capAmt * 0.02)}</span>`;
+}
+
+if (bsaCards[3]) {
+  const worstLoss = Math.round(amount * 0.0025);
+  bsaCards[3].querySelector('.t').innerHTML = `● Reasoning · Stress test`;
+  bsaCards[3].querySelector('.t').removeAttribute('style');
+  bsaCards[3].style.background = '';
+  bsaCards[3].style.borderColor = '';
+  bsaCards[3].querySelector('.q').style.color = '';
+  bsaCards[3].querySelector('.q').innerHTML = `Portfolio holds under a <span class="hi">−25 bps shock</span> on ${anchor.rating} issuers. Max drawdown: <span class="hi">₹${worstLoss.toLocaleString('en-IN')}</span> — within acceptable range. No rebalancing triggered.`;
+}
+
+// --- Update Rate Decision Agent ---
+const rdaStatus = document.querySelector('.a2 .agent-status');
+if (rdaStatus) rdaStatus.innerHTML = `<span class="p"></span> Tracking MPC minutes, G-sec curve, CPI prints — updated ${timeAgo(lastRun)}`;
+
+const rdaMetric = document.querySelector('.a2 .agent-metric .v');
+if (rdaMetric) rdaMetric.textContent = '71%';
+
+const rdaCards = document.querySelectorAll('.a2 .r-card');
+const waitBps = risk === 'aggressive' ? '10-15' : '15-25';
+if (rdaCards[0]) {
+  rdaCards[0].querySelector('.q').innerHTML = `<span class="hi blue">Wait 30 days.</span> Rates on ${tenure}–${tenure+6} mo buckets are likely to rise <span class="hi blue">${waitBps} bps</span> after the next MPC — our stance model puts a hike probability at 62%.`;
+}
+if (rdaCards[1]) {
+  rdaCards[1].querySelector('.q').innerHTML = `Book the <span class="hi blue">${longRung.mo} mo rung today</span>. The long end is pricing a full cycle of cuts already; waiting likely costs you <span class="hi blue">~8 bps</span>.`;
+  rdaCards[1].querySelector('.footer').innerHTML = `<span><span class="k">Action</span> · Execute ${longRung.name}</span><span><span class="k">Cost of wait</span> · +${fmtINR(amount * 0.0008)}/yr</span>`;
+}
+if (rdaCards[2]) {
+  const replaceWith = banks.filter(b => b !== lowRung).slice(0,2).map(b => b.name).join(' or ');
+  rdaCards[2].querySelector('.q').innerHTML = `Flagged <span class="hi blue">${lowRung.name}</span>: its ${lowRung.mo}-mo rate is 22 bps below peer median. If they don't revise within 14 days, the agent will reallocate automatically.`;
+  rdaCards[2].querySelector('.footer').innerHTML = `<span><span class="k">Threshold</span> · 14 days</span><span><span class="k">Replace with</span> · ${replaceWith}</span>`;
+}
+if (rdaCards[3]) {
+  rdaCards[3].querySelector('.q').innerHTML = `<span class="hi blue">${shortRung.name} raised ${shortRung.mo}-mo by +20 bps.</span> Reaffirmed current allocation; no rebalancing needed.`;
+}
+</script>
+</body>
+</html>

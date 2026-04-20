@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Portfolio · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+</head>
+<body data-page="portfolio" data-crumb="Portfolio">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Recommendation">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow"><span class="tick"></span> Step 02 · Agent output</div>
+        <h2 class="screen-title">The <em>recommended</em> portfolio,<br/>rung by rung.</h2>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn">Export PDF</button>
+        <button class="btn primary">Book all 5 FDs →</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card span-7 raised">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Recommended allocation · 5 banks</div>
+            <div class="card-sub">Generated 2m ago by Bank Selection Agent</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <span class="tag">Equal-risk</span>
+            <span class="tag lime">Optimal</span>
+          </div>
+        </div>
+
+        <div class="alloc-card">
+          <div class="donut-wrap">
+            <svg viewBox="0 0 120 120" width="220" height="220">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(1 0 0 / 0.04)" stroke-width="18"/>
+              <g transform="rotate(-90 60 60)">
+                <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(0.88 0.18 130)" stroke-width="18" stroke-dasharray="80.9 208"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(0.74 0.12 235)" stroke-width="18" stroke-dasharray="63.6 225" stroke-dashoffset="-80.9"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(0.74 0.14 300)" stroke-width="18" stroke-dasharray="52 237" stroke-dashoffset="-144.5"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(0.82 0.14 78)" stroke-width="18" stroke-dasharray="46.2 243" stroke-dashoffset="-196.5"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(0.72 0.16 20)" stroke-width="18" stroke-dasharray="46.2 243" stroke-dashoffset="-242.7"/>
+              </g>
+            </svg>
+            <div class="donut-center">
+              <div class="t">Corpus</div>
+              <div class="v">₹25.0 L</div>
+              <div class="s">Blended 7.58%</div>
+            </div>
+          </div>
+          <div class="alloc-list">
+            <div class="alloc-row"><span class="swatch" style="background:oklch(0.88 0.18 130);"></span><div><div class="n">Bajaj Finance · NBFC</div><div class="sub">AAA · 18 mo · 8.35%</div></div><span class="pct">28%</span><span class="amt">₹ 7,00,000</span></div>
+            <div class="alloc-row"><span class="swatch" style="background:oklch(0.74 0.12 235);"></span><div><div class="n">Shriram Finance · NBFC</div><div class="sub">AA+ · 24 mo · 8.30%</div></div><span class="pct">22%</span><span class="amt">₹ 5,50,000</span></div>
+            <div class="alloc-row"><span class="swatch" style="background:oklch(0.74 0.14 300);"></span><div><div class="n">Suryoday SFB · Small-finance</div><div class="sub">AA+ · 12 mo · 8.25%</div></div><span class="pct">18%</span><span class="amt">₹ 4,50,000</span></div>
+            <div class="alloc-row"><span class="swatch" style="background:oklch(0.82 0.14 78);"></span><div><div class="n">Unity SFB · Small-finance</div><div class="sub">AA+ · 9 mo · 8.15%</div></div><span class="pct">16%</span><span class="amt">₹ 4,00,000</span></div>
+            <div class="alloc-row"><span class="swatch" style="background:oklch(0.72 0.16 20);"></span><div><div class="n">Mahindra Finance · NBFC</div><div class="sub">AA+ · 36 mo · 8.20%</div></div><span class="pct">16%</span><span class="amt">₹ 4,00,000</span></div>
+          </div>
+        </div>
+
+        <div class="dicgc">
+          <div class="shield">
+            <svg width="44" height="52" viewBox="0 0 44 52" fill="none">
+              <defs>
+                <linearGradient id="sh" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="oklch(0.74 0.12 235 / 0.35)"/>
+                  <stop offset="1" stop-color="oklch(0.88 0.18 130 / 0.2)"/>
+                </linearGradient>
+              </defs>
+              <path d="M22 2 L42 10 V26 C42 38 34 46 22 50 C10 46 2 38 2 26 V10 Z" fill="url(#sh)" stroke="oklch(0.74 0.12 235)" stroke-width="1.2"/>
+              <path d="M14 26 L20 32 L32 20" stroke="oklch(0.88 0.18 130)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <div style="flex:1;">
+            <div class="t">DICGC · Fully insured</div>
+            <div class="h">Every rupee of your ₹25,00,000 is covered across 5 accounts.</div>
+            <div class="d">Deposit Insurance &amp; Credit Guarantee Corp. covers up to ₹5,00,000 per depositor per bank. Our 5-bank split keeps 100% of your principal + accrued interest inside the coverage envelope.</div>
+            <div class="bar"><div class="fl" style="width:100%"></div></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="num" style="font-size:22px; color:var(--lime);">100%</div>
+            <div style="font-size:10px; color:var(--ink-3); letter-spacing:0.06em; text-transform:uppercase;">Coverage</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="span-5" style="display:flex; flex-direction:column; gap:18px;">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Expected annual returns</div>
+              <div class="card-sub">Assumes reinvestment at prevailing rung yields</div>
+            </div>
+            <span class="tag lime">+ 118 bps vs benchmark</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;">
+            <div>
+              <div style="font-size:11px; color:var(--ink-3); letter-spacing:0.08em; text-transform:uppercase;">Gross · Year 1</div>
+              <div class="num" style="font-size:30px; font-weight:500; letter-spacing:-0.02em; margin-top:6px;">₹ 1,89,500</div>
+              <div class="num" style="color:var(--lime); font-size:12px;">↗ +₹32,100 vs single-bank</div>
+            </div>
+            <div>
+              <div style="font-size:11px; color:var(--ink-3); letter-spacing:0.08em; text-transform:uppercase;">Post-tax · Year 1</div>
+              <div class="num" style="font-size:30px; font-weight:500; letter-spacing:-0.02em; margin-top:6px;">₹ 1,32,650</div>
+              <div class="num" style="color:var(--ink-3); font-size:12px;">After 30% bracket · 15G filed</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:grid; grid-template-columns: 90px 1fr 60px; align-items:center; gap:10px;">
+              <span style="font-size:11.5px; color:var(--ink-3);">FinThesis</span>
+              <div style="height:8px; border-radius:99px; background:oklch(1 0 0 / 0.04); overflow:hidden;"><div style="height:100%; width:94%; background:linear-gradient(90deg, var(--blue), var(--lime));"></div></div>
+              <span class="num" style="color:var(--lime); text-align:right; font-size:12px;">7.58%</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 90px 1fr 60px; align-items:center; gap:10px;">
+              <span style="font-size:11.5px; color:var(--ink-3);">Single bank</span>
+              <div style="height:8px; border-radius:99px; background:oklch(1 0 0 / 0.04); overflow:hidden;"><div style="height:100%; width:80%; background:oklch(1 0 0 / 0.2);"></div></div>
+              <span class="num" style="color:var(--ink-2); text-align:right; font-size:12px;">6.40%</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 90px 1fr 60px; align-items:center; gap:10px;">
+              <span style="font-size:11.5px; color:var(--ink-3);">Savings a/c</span>
+              <div style="height:8px; border-radius:99px; background:oklch(1 0 0 / 0.04); overflow:hidden;"><div style="height:100%; width:41%; background:oklch(1 0 0 / 0.14);"></div></div>
+              <span class="num" style="color:var(--ink-3); text-align:right; font-size:12px;">3.25%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card rate-card">
+          <div class="rate-head">
+            <div>
+              <div class="card-title">Rate Decision · Book now vs Wait</div>
+              <div class="card-sub">RBI MPC · next review in 28 days</div>
+            </div>
+            <span class="tag amber">Watching 3 signals</span>
+          </div>
+          <div class="rate-two">
+            <div class="rate-opt">
+              <span class="rec">Neutral</span>
+              <div class="t">Book now</div>
+              <div class="h">7.58% <span style="color:var(--ink-3); font-size:13px;">blended</span></div>
+              <div class="v mute">Locks 5 rungs today</div>
+              <div class="v mute">Confidence · 46%</div>
+            </div>
+            <div class="rate-opt win">
+              <span class="rec">Recommended</span>
+              <div class="t">Wait 30 days</div>
+              <div class="h">7.78% <span style="color:var(--ink-3); font-size:13px;">est.</span></div>
+              <div class="v">+20 bps expected</div>
+              <div class="v">Confidence · 71%</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--hair); font-size:11.5px; color:var(--ink-3);">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3.5L9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Rate Decision Agent will auto-book your ladder the moment MPC telegraphs a pause. You'll be notified 24h in advance.
+          </div>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <div class="card-head">
+          <div>
+            <div class="card-title">FD ladder · 5 rungs · 9 mo → 36 mo</div>
+            <div class="card-sub">Staggered maturities keep 20% of corpus liquid at all times</div>
+          </div>
+          <div class="legend">
+            <div class="it"><span class="sw" style="background:var(--blue);"></span> Principal</div>
+            <div class="it"><span class="sw" style="background:var(--lime);"></span> Interest accrual</div>
+            <div class="it"><span class="sw" style="background:var(--amber);"></span> Maturity</div>
+          </div>
+        </div>
+
+        <svg viewBox="0 0 1200 220" style="width:100%; height:220px; display:block;">
+          <defs>
+            <linearGradient id="bar1" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="oklch(0.74 0.12 235 / 0.55)"/><stop offset="1" stop-color="oklch(0.88 0.18 130 / 0.85)"/></linearGradient>
+            <linearGradient id="bar2" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="oklch(0.74 0.14 300 / 0.55)"/><stop offset="1" stop-color="oklch(0.88 0.18 130 / 0.85)"/></linearGradient>
+          </defs>
+          <g font-family="JetBrains Mono" font-size="10" fill="oklch(0.58 0.015 260)">
+            <line x1="60" y1="10" x2="60" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <line x1="290" y1="10" x2="290" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <line x1="520" y1="10" x2="520" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <line x1="750" y1="10" x2="750" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <line x1="980" y1="10" x2="980" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <line x1="1170" y1="10" x2="1170" y2="200" stroke="oklch(1 0 0 / 0.06)" stroke-dasharray="2 3"/>
+            <text x="60" y="215">Today</text>
+            <text x="290" y="215">+6 MO</text>
+            <text x="520" y="215">+12 MO</text>
+            <text x="750" y="215">+18 MO</text>
+            <text x="980" y="215">+24 MO</text>
+            <text x="1170" y="215" text-anchor="end">+36 MO</text>
+          </g>
+          <g>
+            <rect x="60" y="14" width="390" height="24" rx="6" fill="url(#bar1)"/>
+            <rect x="450" y="14" width="16" height="24" rx="4" fill="oklch(0.82 0.14 78)"/>
+            <text x="70" y="30" fill="oklch(0.97 0.005 260)" font-size="12" font-family="Inter">Unity SFB · ₹4.0 L · 9 mo · 8.15%</text>
+          </g>
+          <g>
+            <rect x="60" y="54" width="510" height="24" rx="6" fill="url(#bar2)"/>
+            <rect x="570" y="54" width="16" height="24" rx="4" fill="oklch(0.82 0.14 78)"/>
+            <text x="70" y="70" fill="oklch(0.97 0.005 260)" font-size="12" font-family="Inter">Suryoday SFB · ₹4.5 L · 12 mo · 8.25%</text>
+          </g>
+          <g>
+            <rect x="60" y="94" width="712" height="24" rx="6" fill="url(#bar1)"/>
+            <rect x="772" y="94" width="16" height="24" rx="4" fill="oklch(0.82 0.14 78)"/>
+            <text x="70" y="110" fill="oklch(0.97 0.005 260)" font-size="12" font-family="Inter">Bajaj Finance · ₹7.0 L · 18 mo · 8.35% · anchor rung</text>
+          </g>
+          <g>
+            <rect x="60" y="134" width="902" height="24" rx="6" fill="url(#bar2)"/>
+            <rect x="962" y="134" width="16" height="24" rx="4" fill="oklch(0.82 0.14 78)"/>
+            <text x="70" y="150" fill="oklch(0.97 0.005 260)" font-size="12" font-family="Inter">Shriram Finance · ₹5.5 L · 24 mo · 8.30%</text>
+          </g>
+          <g>
+            <rect x="60" y="174" width="1110" height="24" rx="6" fill="url(#bar1)"/>
+            <rect x="1170" y="174" width="16" height="24" rx="4" fill="oklch(0.82 0.14 78)"/>
+            <text x="70" y="190" fill="oklch(0.97 0.005 260)" font-size="12" font-family="Inter">Mahindra Finance · ₹4.0 L · 36 mo · 8.20% · long horizon</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>fintech · Built on <b style="color:var(--ink);">Blostem</b> partner rails · © 2026</div>
+    <div style="display:flex; gap:18px;">
+      <span>Terms</span><span>Privacy</span><span>RBI · Sahamati compliant</span><span class="mono">v 1.2.0</span>
+    </div>
+  </footer>
+</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+// Load result from sessionStorage (set by Optimizer.html)
+const result = JSON.parse(sessionStorage.getItem('optimizeResult') || 'null');
+const params = JSON.parse(sessionStorage.getItem('optimizeParams') || 'null');
+
+if (result && params) {
+  const amount = params.amount;
+  const risk = params.risk;
+  const tax = params.tax;
+  const tenure = params.tenure;
+
+  // Bank allocation based on risk
+  const allocations = {
+    conservative: [
+      { name: 'Suryoday SFB', type: 'Small-finance', rating: 'AA+', pct: 40, mo: 12, rate: 8.25 },
+      { name: 'Unity SFB',    type: 'Small-finance', rating: 'AA+', pct: 30, mo: 18, rate: 8.15 },
+      { name: 'Shivalik SFB', type: 'Small-finance', rating: 'AA',  pct: 20, mo: 24, rate: 8.00 },
+      { name: 'Jana SFB',     type: 'Small-finance', rating: 'AA',  pct: 10, mo: 36, rate: 7.90 },
+    ],
+    moderate: [
+      { name: 'Bajaj Finance',   type: 'NBFC',         rating: 'AAA', pct: 25, mo: 12, rate: 8.35 },
+      { name: 'Suryoday SFB',    type: 'Small-finance', rating: 'AA+', pct: 25, mo: 18, rate: 8.25 },
+      { name: 'Shriram Finance', type: 'NBFC',          rating: 'AA+', pct: 25, mo: 24, rate: 8.30 },
+      { name: 'Unity SFB',       type: 'Small-finance', rating: 'AA+', pct: 25, mo: 36, rate: 8.15 },
+    ],
+    aggressive: [
+      { name: 'Bajaj Finance',    type: 'NBFC', rating: 'AAA', pct: 40, mo: 9,  rate: 8.35 },
+      { name: 'Shriram Finance',  type: 'NBFC', rating: 'AA+', pct: 35, mo: 18, rate: 8.30 },
+      { name: 'Mahindra Finance', type: 'NBFC', rating: 'AA+', pct: 25, mo: 36, rate: 8.20 },
+    ],
+  };
+
+  let banks = allocations[risk] || allocations.moderate;
+
+  // Use real PSO allocation from agent if available
+  if (result.allocation && result.allocation.length > 0) {
+    const typeMap = { 'AAA': 'NBFC', 'AA+': 'NBFC', 'AA': 'Small-finance', 'A+': 'Small-finance' };
+    const agentBanks = result.allocation
+      .filter(a => a.weight_percent > 3)
+      .map(a => ({
+        name: a.bank_name,
+        type: typeMap[a.rating] || 'NBFC',
+        rating: a.rating,
+        pct: Math.round(a.weight_percent),
+        mo: params.tenure || 12,
+        rate: a.interest_rate
+      }));
+    if (agentBanks.length > 0) banks = agentBanks;
+  }
+
+  const colors = [
+    'oklch(0.88 0.18 130)',
+    'oklch(0.74 0.12 235)',
+    'oklch(0.74 0.14 300)',
+    'oklch(0.82 0.14 78)',
+    'oklch(0.72 0.16 20)'
+  ];
+
+  // Blended rate
+  const blended = banks.reduce((s, b) => s + b.rate * b.pct / 100, 0);
+  const grossReturn = amount * blended / 100;
+  const postTax = grossReturn * (1 - tax / 100);
+  const maturity = amount + grossReturn;
+  const singleBank = amount * 0.064;
+  const uplift = grossReturn - singleBank;
+
+  // Format helpers
+  const fmtINR = n => '₹ ' + Math.round(n).toLocaleString('en-IN');
+  const fmtL = n => {
+    if (n >= 10000000) return (n/10000000).toFixed(2) + ' Cr';
+    return (n/100000).toFixed(2) + ' L';
+  };
+
+  // Update donut center
+  document.querySelector('.donut-center .v').textContent = fmtL(amount);
+  document.querySelector('.donut-center .s').textContent = 'Blended ' + blended.toFixed(2) + '%';
+
+  // Update donut slices
+  const circumference = 2 * Math.PI * 46; // ~289
+  const circles = document.querySelectorAll('.donut-wrap svg g circle');
+  let offset = 0;
+  circles.forEach((c, i) => {
+    if (i >= banks.length) { c.setAttribute('stroke-dasharray', '0 289'); return; }
+    const arc = circumference * banks[i].pct / 100;
+    c.setAttribute('stroke', colors[i]);
+    c.setAttribute('stroke-dasharray', arc.toFixed(1) + ' ' + (circumference - arc).toFixed(1));
+    c.setAttribute('stroke-dashoffset', (-offset).toFixed(1));
+    offset += arc;
+  });
+
+  // Update alloc list
+  const allocList = document.querySelector('.alloc-list');
+  allocList.innerHTML = banks.map((b, i) => `
+    <div class="alloc-row">
+      <span class="swatch" style="background:${colors[i]};"></span>
+      <div><div class="n">${b.name}</div><div class="sub">${b.rating} · ${b.mo} mo · ${b.rate}%</div></div>
+      <span class="pct">${b.pct}%</span>
+      <span class="amt">${fmtINR(amount * b.pct / 100)}</span>
+    </div>
+  `).join('');
+
+  // Update DICGC text
+  document.querySelector('.dicgc .h').textContent = 'Every rupee of your ' + fmtINR(amount) + ' is covered across ' + banks.length + ' accounts.';
+
+  // Update returns card
+  const nums = document.querySelectorAll('.num');
+  // Gross Year 1
+  document.querySelectorAll('[style*="font-size:30px"]')[0].textContent = fmtINR(grossReturn);
+  document.querySelectorAll('[style*="font-size:30px"]')[1].textContent = fmtINR(postTax);
+
+  // Uplift tag
+  const bps = Math.round((blended - 6.40) * 100);
+  document.querySelector('.tag.lime').textContent = '+ ' + bps + ' bps vs benchmark';
+
+  // Yield bars
+  const yieldSpans = document.querySelectorAll('.num[style*="text-align:right"]');
+  if (yieldSpans[0]) yieldSpans[0].textContent = blended.toFixed(2) + '%';
+  const bars = document.querySelectorAll('[style*="width:94%"], [style*="width:80%"], [style*="width:41%"]');
+  if (bars[0]) bars[0].style.width = (blended / 10 * 100).toFixed(0) + '%';
+
+  // Post-tax note
+  const ptNote = document.querySelector('[style*="After 30%"]');
+  if (ptNote) ptNote.textContent = 'After ' + tax + '% bracket · 15G filed';
+
+  // Card subtitle
+  document.querySelector('.card-sub').textContent = 'Generated just now by Bank Selection Agent · ' + risk + ' profile';
+
+  // Update FD Ladder SVG
+  const ladderTexts = document.querySelectorAll('.card.span-12 svg text[x="70"]');
+  const sortedBanks = [...banks].sort((a, b) => a.mo - b.mo);
+  ladderTexts.forEach((el, i) => {
+    if (i < sortedBanks.length) {
+      const b = sortedBanks[i];
+      const amt = fmtL(amount * b.pct / 100);
+      const suffix = i === sortedBanks.length - 1 ? ' · long horizon' : i === Math.floor(sortedBanks.length / 2) ? ' · anchor rung' : '';
+      el.textContent = b.name + ' · ' + amt + ' · ' + b.mo + ' mo · ' + b.rate + '%' + suffix;
+    }
+  });
+  const ladderTitle = document.querySelector('.card.span-12 .card-title');
+  if (ladderTitle) ladderTitle.textContent = 'FD ladder · ' + sortedBanks.length + ' rungs · ' + sortedBanks[0].mo + ' mo → ' + sortedBanks[sortedBanks.length - 1].mo + ' mo';
+
+  // Rate decision card
+  const rateOpts = document.querySelectorAll('.rate-opt .h');
+  if (rateOpts[0]) rateOpts[0].innerHTML = blended.toFixed(2) + '% <span style="color:var(--ink-3); font-size:13px;">blended</span>';
+  if (rateOpts[1]) rateOpts[1].innerHTML = (blended + 0.20).toFixed(2) + '% <span style="color:var(--ink-3); font-size:13px;">est.</span>';
+}
+</script>
+</body>
+</html>
