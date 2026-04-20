@@ -20,7 +20,7 @@
       </div>
       <div style="display:flex; gap:8px;">
         <button class="btn">Export PDF</button>
-        <button class="btn primary">Book all 5 FDs →</button>
+        <button class="btn primary" onclick="window.location.href='Booking.html'">Book all 5 FDs →</button>
       </div>
     </div>
 
@@ -239,6 +239,14 @@
 // Load result from sessionStorage (set by Optimizer.html)
 const result = JSON.parse(sessionStorage.getItem('optimizeResult') || 'null');
 const params = JSON.parse(sessionStorage.getItem('optimizeParams') || 'null');
+
+const ts = parseInt(sessionStorage.getItem('optimizeTimestamp') || '0');
+if (!result || !params || (Date.now() - ts) > 30 * 60 * 1000) {
+  sessionStorage.removeItem('optimizeResult');
+  sessionStorage.removeItem('optimizeParams');
+  sessionStorage.removeItem('optimizeTimestamp');
+  window.location.href = 'Optimizer.html';
+}
 
 if (result && params) {
   const amount = params.amount;

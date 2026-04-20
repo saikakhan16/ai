@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Book FDs · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+<style>
+  .booking-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+  .fd-list { display: flex; flex-direction: column; gap: 14px; }
+  .fd-row {
+    display: grid; grid-template-columns: 36px 1fr auto; gap: 16px; align-items: center;
+    padding: 18px 20px; border-radius: 14px;
+    background: var(--bg); border: 1px solid var(--hair);
+    transition: border-color .15s;
+  }
+  .fd-row:hover { border-color: var(--hair-2); }
+  .fd-num { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: oklch(0.18 0.05 150); flex-shrink: 0; }
+  .fd-info .bank { font-size: 14px; font-weight: 600; }
+  .fd-info .meta { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+  .fd-info .meta span { margin-right: 12px; }
+  .fd-right { text-align: right; }
+  .fd-right .amt { font-family: "JetBrains Mono", monospace; font-size: 15px; font-weight: 600; }
+  .fd-right .sub { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+  .fd-right .yield { font-size: 12px; color: var(--lime); margin-top: 2px; }
+
+  .summary-card { position: sticky; top: 24px; }
+  .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--hair); font-size: 13px; }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row .lbl { color: var(--ink-3); }
+  .sum-row .val { font-family: "JetBrains Mono", monospace; font-weight: 600; }
+  .sum-row .val.lime { color: var(--lime); }
+
+  .form-section { margin-top: 24px; }
+  .form-section .sec-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 11.5px; color: var(--ink-3); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; padding: 11px 14px; border-radius: 10px;
+    border: 1px solid var(--hair); background: var(--bg-2);
+    color: var(--ink); font-size: 13px; font-family: inherit; outline: none;
+    transition: border-color .15s;
+  }
+  .field input:focus, .field select:focus { border-color: oklch(0.88 0.18 130 / 0.5); box-shadow: 0 0 0 3px oklch(0.88 0.18 130 / 0.1); }
+  .field select option { background: #1a1d27; }
+
+  .consent-box { display: flex; gap: 10px; align-items: flex-start; padding: 14px; border-radius: 10px; border: 1px solid var(--hair); background: var(--bg); margin-bottom: 18px; font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+  .consent-box input[type=checkbox] { margin-top: 2px; accent-color: var(--lime); flex-shrink: 0; width: 15px; height: 15px; cursor: pointer; }
+
+  .btn-book { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--lime); color: oklch(0.18 0.05 150); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 30px -10px oklch(0.88 0.18 130 / 0.5); transition: background .15s, transform .1s; }
+  .btn-book:hover { background: oklch(0.92 0.18 130); }
+  .btn-book:active { transform: translateY(1px); }
+  .btn-book:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+  .security-note { display: flex; gap: 10px; align-items: center; margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--blue-soft); border: 1px solid oklch(0.74 0.12 235 / 0.25); font-size: 11.5px; color: var(--ink-2); }
+
+  .status-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; padding: 3px 10px; border-radius: 999px; }
+  .status-chip.ready { background: var(--lime-soft); color: var(--lime); }
+
+  .success-overlay { display: none; position: fixed; inset: 0; background: oklch(0 0 0 / 0.75); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+  .success-overlay.show { display: flex; }
+  .success-card { background: var(--panel); border: 1px solid var(--hair-2); border-radius: 24px; padding: 48px 44px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 40px 80px -20px oklch(0 0 0 / 0.6); }
+  .success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--lime-soft); border: 2px solid var(--lime); display: grid; place-items: center; margin: 0 auto 20px; }
+  .success-card h3 { font-size: 26px; font-weight: 500; letter-spacing: -.02em; margin-bottom: 10px; }
+  .success-card h3 em { font-family: "Instrument Serif", serif; font-style: italic; color: var(--lime); }
+  .success-card p { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin-bottom: 4px; }
+  .success-ref { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--ink-2); margin: 18px 0; padding: 12px 16px; border-radius: 8px; background: var(--bg); border: 1px solid var(--hair); }
+  .success-actions { display: flex; gap: 10px; margin-top: 24px; }
+  .success-actions button { flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--hair); background: var(--bg); color: var(--ink); transition: background .15s; }
+  .success-actions button:hover { background: var(--bg-2); }
+  .success-actions button.primary { background: var(--lime); color: oklch(0.18 0.05 150); border-color: var(--lime); }
+  .success-actions button.primary:hover { background: oklch(0.92 0.18 130); }
+</style>
+</head>
+<body data-page="booking" data-crumb="Book FDs">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Book FDs">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow"><span class="tick"></span> Step 03 · Booking</div>
+        <h2 class="screen-title">Confirm &amp; <em>book</em> your<br/>FD ladder.</h2>
+      </div>
+      <button class="btn" onclick="history.back()">&#8592; Back to Portfolio</button>
+    </div>
+
+    <div class="booking-grid">
+
+      <!-- LEFT: FD list + form -->
+      <div>
+        <div class="card raised" style="margin-bottom:20px;">
+          <div class="card-head">
+            <div class="card-title">FDs to be booked</div>
+            <span class="status-chip ready" id="fd-count-chip">loading…</span>
+          </div>
+          <div class="fd-list" id="fd-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">Your details</div></div>
+
+          <div class="form-section">
+            <div class="sec-title">Personal Information</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="field"><label>Full name (as per PAN)</label><input type="text" id="inp-name" placeholder="Anjali Raman" /></div>
+              <div class="field"><label>PAN number</label><input type="text" id="inp-pan" placeholder="ABCDE1234F" maxlength="10" oninput="this.value=this.value.toUpperCase()" /></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="field"><label>Mobile number</label><input type="tel" id="inp-mobile" placeholder="+91 98765 43210" /></div>
+              <div class="field"><label>Email address</label><input type="email" id="inp-email" placeholder="anjali@example.com" /></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="sec-title">Bank Account (for interest credit)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="field"><label>Account number</label><input type="text" id="inp-acc" placeholder="XXXX XXXX XXXX" /></div>
+              <div class="field"><label>IFSC code</label><input type="text" id="inp-ifsc" placeholder="SBIN0001234" oninput="this.value=this.value.toUpperCase()" /></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="sec-title">Tax Declaration</div>
+            <div class="field">
+              <label>Form 15G / 15H (TDS exemption)</label>
+              <select id="inp-15g">
+                <option value="none">Not applicable</option>
+                <option value="15g">Submit Form 15G (below 60 years)</option>
+                <option value="15h">Submit Form 15H (senior citizen 60+)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Summary + confirm -->
+      <div class="summary-card">
+        <div class="card raised">
+          <div class="card-head"><div class="card-title">Booking summary</div></div>
+          <div class="sum-row"><span class="lbl">Total investment</span><span class="val" id="sum-total">—</span></div>
+          <div class="sum-row"><span class="lbl">No. of FDs</span><span class="val" id="sum-count">—</span></div>
+          <div class="sum-row"><span class="lbl">Blended yield</span><span class="val lime" id="sum-yield">—</span></div>
+          <div class="sum-row"><span class="lbl">Annual return (gross)</span><span class="val" id="sum-gross">—</span></div>
+          <div class="sum-row"><span class="lbl">Post-tax return</span><span class="val" id="sum-posttax">—</span></div>
+          <div class="sum-row"><span class="lbl">Total maturity value</span><span class="val lime" id="sum-maturity">—</span></div>
+          <div class="sum-row"><span class="lbl">DICGC coverage</span><span class="val lime">100% &#10003;</span></div>
+
+          <div style="margin-top:20px;">
+            <div class="consent-box">
+              <input type="checkbox" id="consent" />
+              <span>I confirm the above details are correct and authorise Blostem to initiate FD bookings with partner banks on my behalf via Sahamati AA framework.</span>
+            </div>
+            <button class="btn-book" id="btn-confirm" onclick="confirmBooking()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Confirm &amp; Book all FDs
+            </button>
+            <div class="security-note">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2 L13 4.5 V9 C13 12.5 11 14.5 8 15.5 C5 14.5 3 12.5 3 9 V4.5 Z" stroke="oklch(0.74 0.12 235)" stroke-width="1.2" fill="oklch(0.74 0.12 235 / 0.15)"/><path d="M6 8.5l1.5 1.5L10.5 7" stroke="oklch(0.88 0.18 130)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              256-bit encrypted · RBI / Sahamati compliant · Blostem partner rails
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 14l6 6L22 8" stroke="oklch(0.88 0.18 130)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3>FDs <em>booked</em> successfully!</h3>
+    <p>Your FD ladder has been initiated across all partner banks.</p>
+    <p>Confirmation SMS &amp; email will be sent shortly.</p>
+    <div class="success-ref" id="success-ref">REF: FT-2026-XXXXXX</div>
+    <div class="success-actions">
+      <button onclick="window.location.href='Renewal.html'">View Renewals</button>
+      <button class="primary" onclick="window.location.href='Overview.html'">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+const result = JSON.parse(sessionStorage.getItem('optimizeResult') || 'null');
+const params = JSON.parse(sessionStorage.getItem('optimizeParams') || 'null');
+
+const ts = parseInt(sessionStorage.getItem('optimizeTimestamp') || '0');
+if (!result || !params || (Date.now() - ts) > 30 * 60 * 1000) {
+  sessionStorage.removeItem('optimizeResult');
+  sessionStorage.removeItem('optimizeParams');
+  sessionStorage.removeItem('optimizeTimestamp');
+  window.location.href = 'Optimizer.html';
+}
+
+const COLORS = [
+  'oklch(0.88 0.18 130)',
+  'oklch(0.74 0.12 235)',
+  'oklch(0.74 0.14 300)',
+  'oklch(0.82 0.14 78)',
+  'oklch(0.72 0.16 20)'
+];
+
+const ALLOC = {
+  conservative: [
+    { name: 'Suryoday SFB',    rating: 'AA+', pct: 40, mo: 12, rate: 8.25 },
+    { name: 'Unity SFB',       rating: 'AA+', pct: 30, mo: 18, rate: 8.15 },
+    { name: 'Shivalik SFB',    rating: 'AA',  pct: 20, mo: 24, rate: 8.00 },
+    { name: 'Jana SFB',        rating: 'AA',  pct: 10, mo: 36, rate: 7.90 },
+  ],
+  moderate: [
+    { name: 'Bajaj Finance',   rating: 'AAA', pct: 25, mo: 12, rate: 8.35 },
+    { name: 'Suryoday SFB',    rating: 'AA+', pct: 25, mo: 18, rate: 8.25 },
+    { name: 'Shriram Finance', rating: 'AA+', pct: 25, mo: 24, rate: 8.30 },
+    { name: 'Unity SFB',       rating: 'AA+', pct: 25, mo: 36, rate: 8.15 },
+  ],
+  aggressive: [
+    { name: 'Bajaj Finance',    rating: 'AAA', pct: 40, mo: 9,  rate: 8.35 },
+    { name: 'Shriram Finance',  rating: 'AA+', pct: 35, mo: 18, rate: 8.30 },
+    { name: 'Mahindra Finance', rating: 'AA+', pct: 25, mo: 36, rate: 8.20 },
+  ],
+};
+
+const fmtINR = n => '&#8377; ' + Math.round(n).toLocaleString('en-IN');
+
+function getBanks() {
+  const risk = params && params.risk ? params.risk : 'moderate';
+  const amount = params && params.amount ? params.amount : 2500000;
+  let banks = ALLOC[risk] || ALLOC.moderate;
+  if (result && result.allocation && result.allocation.length > 0) {
+    const mapped = result.allocation
+      .filter(function(a) { return a.weight_percent > 3; })
+      .map(function(a) { return { name: a.bank_name, rating: a.rating, pct: Math.round(a.weight_percent), mo: params && params.tenure ? params.tenure : 12, rate: a.interest_rate }; });
+    if (mapped.length > 0) banks = mapped;
+  }
+  return banks.map(function(b) { return Object.assign({}, b, { amount: Math.round(amount * b.pct / 100) }); });
+}
+
+function render() {
+  var banks = getBanks();
+  var amount = params && params.amount ? params.amount : 2500000;
+  var tax = params && params.tax ? params.tax : 30;
+  var list = document.getElementById('fd-list');
+
+  list.innerHTML = banks.map(function(b, i) {
+    var interest = Math.round(b.amount * b.rate / 100 * b.mo / 12);
+    var maturity = b.amount + interest;
+    return '<div class="fd-row">' +
+      '<div class="fd-num" style="background:' + COLORS[i % COLORS.length] + '">' + (i + 1) + '</div>' +
+      '<div class="fd-info">' +
+        '<div class="bank">' + b.name + '</div>' +
+        '<div class="meta">' +
+          '<span>' + b.rating + '</span>' +
+          '<span>' + b.mo + ' months</span>' +
+          '<span class="mono">' + b.rate + '% p.a.</span>' +
+          '<span>DICGC insured &#10003;</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="fd-right">' +
+        '<div class="amt">' + fmtINR(b.amount) + '</div>' +
+        '<div class="sub">Maturity: ' + fmtINR(maturity) + '</div>' +
+        '<div class="yield">+' + fmtINR(interest) + ' interest</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('fd-count-chip').textContent = banks.length + ' FDs · DICGC insured';
+
+  var blended = banks.reduce(function(s, b) { return s + b.rate * b.pct / 100; }, 0);
+  var gross = amount * blended / 100;
+  var postTax = gross * (1 - tax / 100);
+  var maturityTotal = amount + gross;
+
+  document.getElementById('sum-total').innerHTML    = fmtINR(amount);
+  document.getElementById('sum-count').textContent  = banks.length + ' FDs';
+  document.getElementById('sum-yield').textContent  = blended.toFixed(2) + '%';
+  document.getElementById('sum-gross').innerHTML    = fmtINR(gross);
+  document.getElementById('sum-posttax').innerHTML  = fmtINR(postTax);
+  document.getElementById('sum-maturity').innerHTML = fmtINR(maturityTotal);
+}
+
+function confirmBooking() {
+  var name   = document.getElementById('inp-name').value.trim();
+  var pan    = document.getElementById('inp-pan').value.trim();
+  var mobile = document.getElementById('inp-mobile').value.trim();
+  var email  = document.getElementById('inp-email').value.trim();
+  var consent= document.getElementById('consent').checked;
+
+  if (!name || !pan || !mobile || !email) {
+    alert('Please fill in Name, PAN, Mobile and Email before confirming.');
+    return;
+  }
+  if (!consent) {
+    alert('Please accept the consent declaration to proceed.');
+    return;
+  }
+
+  var btn = document.getElementById('btn-confirm');
+  btn.disabled = true;
+  btn.innerHTML = 'Booking in progress\u2026';
+
+  setTimeout(function() {
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var ref = '';
+    for (var i = 0; i < 6; i++) ref += chars.charAt(Math.floor(Math.random() * chars.length));
+    document.getElementById('success-ref').textContent = 'REF: FT-2026-' + ref;
+    document.getElementById('success-overlay').classList.add('show');
+  }, 2000);
+}
+
+render();
+</script>
+</body>
+</html>

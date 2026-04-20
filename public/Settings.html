@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Settings · fintech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css?v=2">
+<style>
+  .settings-grid { display: grid; grid-template-columns: 200px 1fr; gap: 28px; align-items: start; }
+  .settings-nav { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 4px; }
+  .snav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; font-size: 13px; color: var(--ink-3); cursor: pointer; border: none; background: transparent; font-family: inherit; text-align: left; width: 100%; transition: background .15s, color .15s; }
+  .snav-item:hover { background: var(--hair); color: var(--ink); }
+  .snav-item.active { background: var(--lime-soft); color: var(--lime); font-weight: 500; }
+  .snav-item svg { flex-shrink: 0; }
+
+  .settings-section { display: none; }
+  .settings-section.show { display: block; }
+
+  .setting-group { margin-bottom: 28px; }
+  .setting-group-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--hair); }
+
+  .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--hair); }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-row .info .label { font-size: 14px; font-weight: 500; }
+  .setting-row .info .desc { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+
+  .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track { position: absolute; inset: 0; border-radius: 999px; background: var(--hair-2); cursor: pointer; transition: background .2s; }
+  .toggle input:checked + .toggle-track { background: var(--lime); }
+  .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform .2s; pointer-events: none; }
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 11.5px; color: var(--ink-3); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; padding: 11px 14px; border-radius: 10px;
+    border: 1px solid var(--hair); background: var(--bg-2);
+    color: var(--ink); font-size: 13px; font-family: inherit; outline: none;
+    transition: border-color .15s;
+  }
+  .field input:focus, .field select:focus { border-color: oklch(0.88 0.18 130 / 0.5); box-shadow: 0 0 0 3px oklch(0.88 0.18 130 / 0.1); }
+  .field select option { background: #1a1d27; }
+
+  .avatar-row { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+  .big-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, oklch(0.74 0.12 235), oklch(0.88 0.18 130)); display: grid; place-items: center; font-size: 22px; font-weight: 700; color: oklch(0.18 0.05 150); flex-shrink: 0; }
+  .avatar-actions { display: flex; flex-direction: column; gap: 6px; }
+  .avatar-actions button { padding: 7px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; font-family: inherit; border: 1px solid var(--hair); background: var(--bg-2); color: var(--ink-2); }
+  .avatar-actions button:hover { color: var(--ink); background: var(--panel); }
+
+  .danger-zone { border: 1px solid oklch(0.72 0.16 20 / 0.3); border-radius: 12px; padding: 18px; background: oklch(0.72 0.16 20 / 0.05); }
+  .danger-zone .dz-title { font-size: 12px; color: var(--rose); font-weight: 600; margin-bottom: 14px; letter-spacing: .05em; text-transform: uppercase; }
+  .danger-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid oklch(0.72 0.16 20 / 0.15); }
+  .danger-row:last-child { border-bottom: none; }
+  .danger-row .info .label { font-size: 13px; }
+  .danger-row .info .desc { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+  .btn-danger { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid oklch(0.72 0.16 20 / 0.4); background: oklch(0.72 0.16 20 / 0.1); color: var(--rose); }
+  .btn-danger:hover { background: oklch(0.72 0.16 20 / 0.2); }
+
+  .save-bar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--hair); }
+  .btn-save { padding: 10px 24px; border-radius: 10px; border: none; background: var(--lime); color: oklch(0.18 0.05 150); font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .15s; }
+  .btn-save:hover { background: oklch(0.92 0.18 130); }
+  .btn-cancel { padding: 10px 18px; border-radius: 10px; border: 1px solid var(--hair); background: transparent; color: var(--ink-3); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .btn-cancel:hover { color: var(--ink); }
+
+  .saved-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--lime); color: oklch(0.18 0.05 150); padding: 10px 22px; border-radius: 999px; font-size: 13px; font-weight: 600; transition: transform .3s; z-index: 999; }
+  .saved-toast.show { transform: translateX(-50%) translateY(0); }
+
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip-opt { padding: 7px 14px; border-radius: 999px; font-size: 12px; border: 1px solid var(--hair); background: transparent; color: var(--ink-3); cursor: pointer; font-family: inherit; transition: all .15s; }
+  .chip-opt.on { border-color: var(--lime); background: var(--lime-soft); color: var(--lime); }
+</style>
+</head>
+<body data-page="settings" data-crumb="Settings">
+
+<div id="page-content">
+  <div class="screen" data-screen-label="Settings">
+    <div class="screen-head">
+      <div>
+        <div class="screen-eyebrow">Account</div>
+        <h2 class="screen-title">Settings &amp; <em>preferences</em>.</h2>
+      </div>
+    </div>
+
+    <div class="settings-grid">
+
+      <!-- LEFT NAV -->
+      <nav class="settings-nav">
+        <button class="snav-item active" onclick="showTab('profile')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 14c.5-3 2.8-4.5 5.5-4.5s5 1.5 5.5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Profile
+        </button>
+        <button class="snav-item" onclick="showTab('notifications')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2a4.5 4.5 0 0 0-4.5 4.5v2.5L2 11h12l-1.5-2V6.5A4.5 4.5 0 0 0 8 2z" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 11v.5a1.5 1.5 0 0 0 3 0V11" stroke="currentColor" stroke-width="1.3"/></svg>
+          Notifications
+        </button>
+        <button class="snav-item" onclick="showTab('preferences')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Preferences
+        </button>
+        <button class="snav-item" onclick="showTab('security')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.3"/></svg>
+          Security
+        </button>
+        <button class="snav-item" onclick="showTab('linked')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l1.5-1.5a3.5 3.5 0 0 0-5-5L7 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M9.5 6.5a3.5 3.5 0 0 0-5 0L3 8a3.5 3.5 0 0 0 5 5L9 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Linked banks
+        </button>
+      </nav>
+
+      <!-- RIGHT CONTENT -->
+      <div>
+
+        <!-- PROFILE -->
+        <div class="settings-section show" id="tab-profile">
+          <div class="card raised">
+            <div class="card-head"><div class="card-title">Profile information</div></div>
+            <div class="avatar-row">
+              <div class="big-avatar" id="avatar-letter">A</div>
+              <div class="avatar-actions">
+                <button>Change photo</button>
+                <button>Remove</button>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="field"><label>First name</label><input type="text" id="p-fname" value="Anjali" /></div>
+              <div class="field"><label>Last name</label><input type="text" id="p-lname" value="Raman" /></div>
+            </div>
+            <div class="field"><label>Email address</label><input type="email" id="p-email" value="anjali@finthesis.app" /></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="field"><label>Mobile number</label><input type="tel" id="p-mobile" value="+91 98765 43210" /></div>
+              <div class="field"><label>PAN number</label><input type="text" id="p-pan" value="ABCDE1234F" /></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="field"><label>Date of birth</label><input type="date" id="p-dob" value="1990-04-15" /></div>
+              <div class="field">
+                <label>Tax bracket</label>
+                <select id="p-tax">
+                  <option>5%</option><option>10%</option><option>20%</option><option selected>30%</option>
+                </select>
+              </div>
+            </div>
+            <div class="save-bar">
+              <button class="btn-cancel" onclick="cancelChanges()">Cancel</button>
+              <button class="btn-save" onclick="saveSettings()">Save changes</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="settings-section" id="tab-notifications">
+          <div class="card raised">
+            <div class="card-head"><div class="card-title">Notification preferences</div></div>
+            <div class="setting-group">
+              <div class="setting-group-title">Rate alerts</div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Rate hike detected</div><div class="desc">Alert when any partner bank raises FD rate by 10+ bps</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">RBI MPC review</div><div class="desc">Notify 2 days before Monetary Policy Committee meeting</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Competitor rate drop</div><div class="desc">Alert when a bank outside your ladder offers better rates</div></div>
+                <label class="toggle"><input type="checkbox" /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+            </div>
+            <div class="setting-group">
+              <div class="setting-group-title">Portfolio events</div>
+              <div class="setting-row">
+                <div class="info"><div class="label">FD maturity reminder</div><div class="desc">7 days and 1 day before each FD matures</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Auto-renewal executed</div><div class="desc">Confirmation when agent auto-renews an FD</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">TDS deducted</div><div class="desc">Alert when bank deducts TDS from interest</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+            </div>
+            <div class="setting-group">
+              <div class="setting-group-title">Delivery</div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Email notifications</div><div class="desc">anjali@finthesis.app</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">SMS alerts</div><div class="desc">+91 98765 43210</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">WhatsApp updates</div><div class="desc">Receive weekly portfolio digest on WhatsApp</div></div>
+                <label class="toggle"><input type="checkbox" /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+            </div>
+            <div class="save-bar">
+              <button class="btn-save" onclick="saveSettings()">Save preferences</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PREFERENCES -->
+        <div class="settings-section" id="tab-preferences">
+          <div class="card raised">
+            <div class="card-head"><div class="card-title">App preferences</div></div>
+            <div class="setting-group">
+              <div class="setting-group-title">Default optimizer settings</div>
+              <div class="field"><label>Default risk profile</label>
+                <select><option>Conservative</option><option selected>Moderate</option><option>Aggressive</option></select>
+              </div>
+              <div class="field"><label>Default tenure</label>
+                <select><option>6 months</option><option>12 months</option><option selected>18 months</option><option>24 months</option><option>36 months</option></select>
+              </div>
+              <div class="field"><label>Default liquidity preference</label>
+                <select><option>0% (fully locked)</option><option selected>20%</option><option>40%</option><option>60%</option><option>100% (fully flexible)</option></select>
+              </div>
+            </div>
+            <div class="setting-group">
+              <div class="setting-group-title">Display</div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Show amounts in Lakhs</div><div class="desc">Display &#8377;5,00,000 as &#8377;5L</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Show DICGC badge on all views</div><div class="desc">Always show insurance coverage indicator</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="info"><div class="label">Agent reasoning panel</div><div class="desc">Show AI reasoning cards on Portfolio page</div></div>
+                <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+              </div>
+            </div>
+            <div class="save-bar">
+              <button class="btn-cancel" onclick="cancelChanges()">Cancel</button>
+              <button class="btn-save" onclick="saveSettings()">Save preferences</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="settings-section" id="tab-security">
+          <div class="card raised" style="margin-bottom:20px;">
+            <div class="card-head"><div class="card-title">Password</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="field" style="grid-column:1/-1"><label>Current password</label><input type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" /></div>
+              <div class="field"><label>New password</label><input type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" /></div>
+              <div class="field"><label>Confirm new password</label><input type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" /></div>
+            </div>
+            <div class="save-bar">
+              <button class="btn-save" onclick="saveSettings()">Update password</button>
+            </div>
+          </div>
+          <div class="card raised" style="margin-bottom:20px;">
+            <div class="card-head"><div class="card-title">Two-factor authentication</div></div>
+            <div class="setting-row">
+              <div class="info"><div class="label">2FA via OTP (SMS)</div><div class="desc">+91 98765 43210 — active</div></div>
+              <label class="toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+            </div>
+            <div class="setting-row">
+              <div class="info"><div class="label">Authenticator app</div><div class="desc">Google Authenticator / Authy</div></div>
+              <button class="btn-cancel" style="padding:7px 14px;font-size:12px;">Setup</button>
+            </div>
+          </div>
+          <div class="card raised">
+            <div class="card-head"><div class="card-title">Active sessions</div></div>
+            <div class="setting-row">
+              <div class="info"><div class="label">Chrome · Windows 11</div><div class="desc">Mumbai, India · Current session</div></div>
+              <span style="font-size:11px;color:var(--lime);">Active now</span>
+            </div>
+            <div class="setting-row">
+              <div class="info"><div class="label">Safari · iPhone 15</div><div class="desc">Mumbai, India · 2 hours ago</div></div>
+              <button class="btn-danger" style="font-size:11px;padding:5px 10px;">Revoke</button>
+            </div>
+            <div class="save-bar" style="padding-top:14px;margin-top:0;">
+              <button class="btn-danger" onclick="alert('All other sessions signed out.')">Sign out all other sessions</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LINKED BANKS -->
+        <div class="settings-section" id="tab-linked">
+          <div class="card raised">
+            <div class="card-head">
+              <div class="card-title">Linked partner banks</div>
+              <button class="btn" style="font-size:12px;padding:7px 14px;">+ Link new bank</button>
+            </div>
+            <div class="setting-row">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:var(--lime-soft);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--lime);">BF</div>
+                <div class="info"><div class="label">Bajaj Finance</div><div class="desc">AAA · FD active · linked via Sahamati AA</div></div>
+              </div>
+              <span style="font-size:11px;padding:3px 10px;border-radius:999px;background:var(--lime-soft);color:var(--lime);">Connected</span>
+            </div>
+            <div class="setting-row">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-soft);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--blue);">SU</div>
+                <div class="info"><div class="label">Suryoday SFB</div><div class="desc">AA+ · FD active · linked via Sahamati AA</div></div>
+              </div>
+              <span style="font-size:11px;padding:3px 10px;border-radius:999px;background:var(--lime-soft);color:var(--lime);">Connected</span>
+            </div>
+            <div class="setting-row">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:oklch(0.74 0.14 300 / 0.15);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--violet);">SR</div>
+                <div class="info"><div class="label">Shriram Finance</div><div class="desc">AA+ · No active FD</div></div>
+              </div>
+              <span style="font-size:11px;padding:3px 10px;border-radius:999px;background:var(--amber-soft);color:var(--amber);">Idle</span>
+            </div>
+            <div class="setting-row">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:oklch(0.82 0.14 78 / 0.15);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--amber);">UN</div>
+                <div class="info"><div class="label">Unity SFB</div><div class="desc">AA+ · FD active · linked via Sahamati AA</div></div>
+              </div>
+              <span style="font-size:11px;padding:3px 10px;border-radius:999px;background:var(--lime-soft);color:var(--lime);">Connected</span>
+            </div>
+            <div class="setting-row">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:oklch(0.72 0.16 20 / 0.12);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--rose);">MF</div>
+                <div class="info"><div class="label">Mahindra Finance</div><div class="desc">AA+ · Pending KYC verification</div></div>
+              </div>
+              <span style="font-size:11px;padding:3px 10px;border-radius:999px;background:oklch(0.72 0.16 20 / 0.12);color:var(--rose);">Pending</span>
+            </div>
+            <div style="margin-top:18px;">
+              <div class="danger-zone">
+                <div class="dz-title">Danger zone</div>
+                <div class="danger-row">
+                  <div class="info"><div class="label">Unlink all banks</div><div class="desc">Removes Sahamati AA consent. Active FDs are not affected.</div></div>
+                  <button class="btn-danger" onclick="alert('Please contact support to unlink all banks.')">Unlink all</button>
+                </div>
+                <div class="danger-row">
+                  <div class="info"><div class="label">Delete account</div><div class="desc">Permanently delete your FinThesis account and all data.</div></div>
+                  <button class="btn-danger" onclick="alert('Please contact support@finthesis.app to delete your account.')">Delete account</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="saved-toast" id="saved-toast">Changes saved successfully</div>
+
+<script src="assets/shell.js?v=2"></script>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.settings-section').forEach(function(s) { s.classList.remove('show'); });
+  document.querySelectorAll('.snav-item').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('show');
+  event.currentTarget.classList.add('active');
+}
+
+function saveSettings() {
+  var toast = document.getElementById('saved-toast');
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+
+function cancelChanges() {
+  history.back();
+}
+</script>
+</body>
+</html>

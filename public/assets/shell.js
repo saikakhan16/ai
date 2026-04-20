@@ -79,13 +79,13 @@
     sb.appendChild(nav);
     sb.insertAdjacentHTML('beforeend', `
       <div class="sidebar-bottom">
-        <div class="sidebar-user">
+        <a class="sidebar-user" href="Settings.html" style="text-decoration:none;cursor:pointer;">
           <div class="sidebar-avatar">A</div>
           <div>
             <div class="sidebar-user-name">Anjali Raman</div>
             <div class="sidebar-user-email">anjali@finthesis.app</div>
           </div>
-        </div>
+        </a>
       </div>`);
     return sb;
   }
