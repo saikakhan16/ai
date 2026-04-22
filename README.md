@@ -1,48 +1,52 @@
 # FD Portfolio Optimizer
-## Hybrid AI System — PSO Algorithm + Groq LLM + 2 Live Agents
+## Hybrid AI System — PSO Algorithm + Groq LLM + 2 Live Agents + FD vs Alternatives Comparator
 
 ---
 
 ## Architecture
 
 ```
-User Input (amount, risk, tenure)
+User Input (amount, risk, tenure, tax_slab)
            │
            ▼
 ┌──────────────────────────┐
-│   Optimizer (Frontend)   │  ← Slider UI · risk profile · tenure
+│   Optimizer (Frontend)   │  ← Slider UI · risk profile · tenure · tax bracket
 └────────────┬─────────────┘
              │ POST /optimize
              ▼
 ┌──────────────────────────┐
-│   FastAPI  (api/index.py)│  ← Runs on localhost:8001
+│  FastAPI  (api_new.py)   │  ← Runs on localhost:8002
 └────────────┬─────────────┘
              │
-    ┌────────┴────────┐
-    ▼                 ▼
-┌──────────┐    ┌─────────────────┐
-│  PSO     │    │  Groq LLM       │
-│Algorithm │    │  llama-3.1-8b   │
-│60 part.  │    │  ~500 tokens    │
-│200 iter. │    │  Advisory tips  │
-└────┬─────┘    └──────┬──────────┘
-     └────────┬─────────┘
-              ▼
-   { allocation[], summary{}, ladder[] }
-              │
-              ▼ sessionStorage
-    ┌─────────────────────┐
-    │  Browser Dashboard  │
-    │                     │
-    │  ┌───────────────┐  │
-    │  │Bank Selection │  │  ← Agent β · 94% conf
-    │  │    Agent      │  │    Real PSO banks + weights
-    │  └───────────────┘  │
-    │  ┌───────────────┐  │
-    │  │Rate Decision  │  │  ← Agent ρ · 71% conf
-    │  │    Agent      │  │    Tenure timing · watchlist
-    │  └───────────────┘  │
-    └─────────────────────┘
+    ┌────────┴────────────────────┐
+    ▼                             ▼
+┌──────────┐              ┌──────────────────┐
+│  PSO     │              │  Groq LLM        │
+│Algorithm │              │  llama-3.1-8b    │
+│60 part.  │              │  Bank Selection  │
+│200 iter. │              │  Rate Decision   │
+└────┬─────┘              └──────┬───────────┘
+     │                           │
+     └──────────┬────────────────┘
+                ▼
+   ┌─────────────────────────┐
+   │  FD vs Alternatives     │  ← Comparator Agent
+   │  Comparator Agent       │    FD · Debt MF · SGB · RD · PPF
+   │  (Fisher equation,      │    Pre-tax / Post-tax / Real return
+   │   CPI inflation, tax)   │
+   └────────────┬────────────┘
+                ▼
+  { allocation[], summary{}, comparison_rows[], bank_recommendation, rate_decision }
+                │
+                ▼ sessionStorage
+     ┌─────────────────────┐
+     │  Browser Dashboard  │
+     │  (public/ folder)   │
+     │                     │
+     │  Portfolio.html     │  ← Allocation donut · FD ladder · Comparator table
+     │  Agents.html        │  ← Bank Selection Agent · Rate Decision Agent
+     │  Analytics.html     │  ← Bank table · maturity timeline
+     └─────────────────────┘
 ```
 
 ---
@@ -51,33 +55,37 @@ User Input (amount, risk, tenure)
 
 ```
 AI/
+├── api_new.py             ← Main FastAPI server (port 8002) — use this
 ├── api/
-│   └── index.py          ← FastAPI server (port 8001) — main backend
+│   └── index.py           ← Legacy FastAPI (port 8001)
 ├── api_vercel.py          ← Vercel serverless version
 ├── vercel.json            ← Deployment config
 │
 ├── fd_agents/
-│   ├── main.py            ← CLI entry point (PSO + Groq advisory)
+│   ├── api_new.py         ← FastAPI server (port 8002) ← START THIS
+│   ├── simple_main.py     ← Direct pipeline (PSO + report, no CrewAI)
+│   ├── main.py            ← CLI entry point
 │   ├── tasks.py           ← Task definitions
 │   ├── requirements.txt
 │   ├── .env               ← GROQ_API_KEY goes here
-│   ├── agents/
-│   │   ├── pso_optimizer.py   ← PSO algorithm (core engine)
-│   │   ├── data_collector.py  ← Bank rate data + tools
-│   │   └── user_advisor.py    ← Report generation
-│   └── config/
-│       └── llm.py         ← Groq LLM config
+│   └── agents/
+│       ├── pso_optimizer.py     ← PSO algorithm (core engine)
+│       ├── data_collector.py    ← Bank rate data + tools
+│       ├── user_advisor.py      ← Report generation
+│       ├── bank_selector_agent.py  ← Agent 1: Bank recommendation
+│       ├── rate_decision_agent.py  ← Agent 2: Rate timing decision
+│       └── comparator_agent.py     ← FD vs alternatives comparison
 │
-└── public/
+└── public/                ← Frontend (dark theme, Vercel deployed)
     ├── Login.html         ← Landing / sign-in
     ├── Overview.html      ← Portfolio summary dashboard
-    ├── Optimizer.html     ← Main input: amount · risk · tenure
-    ├── Portfolio.html     ← FD ladder + allocation cards
+    ├── Optimizer.html     ← Input: amount · risk · tenure · tax bracket
+    ├── Portfolio.html     ← Allocation · FD ladder · Comparator table
     ├── Analytics.html     ← Bank table · maturity timeline
     ├── Agents.html        ← 2 live AI agents · reasoning cards
     ├── Renewal.html       ← Renewal & tax (Form 15G)
     └── assets/
-        ├── app.css
+        ├── app.css        ← Dark theme styles
         └── shell.js       ← Nav · sidebar · routing
 ```
 
@@ -104,8 +112,8 @@ echo "GROQ_API_KEY=gsk_your_key_here" > .env
 
 ### Step 3 — Start API server
 ```bash
-cd api
-uvicorn index:app --reload --port 8001
+cd fd_agents
+uvicorn api_new:app --host 0.0.0.0 --port 8002 --reload
 ```
 
 ### Step 4 — Open frontend
@@ -114,10 +122,10 @@ uvicorn index:app --reload --port 8001
 # Open http://localhost:5500/public/Login.html
 ```
 
-### Step 5 — Run CLI (optional, full report in terminal)
+### Step 5 — Run CLI (optional)
 ```bash
 cd fd_agents
-venv/Scripts/python main.py
+python simple_main.py
 ```
 
 ---
@@ -126,17 +134,18 @@ venv/Scripts/python main.py
 
 ```bash
 # Health check
-GET  http://localhost:8001/health
+GET  http://localhost:8002/health
 
 # Run optimization
-POST http://localhost:8001/optimize
+POST http://localhost:8002/optimize
 Content-Type: application/json
 
 {
   "amount": 1000000,
   "risk_profile": "moderate",
   "tenure_months": 12,
-  "name": "Rahul"
+  "tax_slab_pct": 30,
+  "name": "Investor"
 }
 ```
 
@@ -145,31 +154,64 @@ Response:
 {
   "success": true,
   "allocation": [
-    { "bank_name": "Bajaj Finance", "weight_percent": 20.8, "interest_rate": 8.35 },
-    ...
+    {
+      "bank_name": "Bajaj Finance",
+      "allocated_amount": 207755,
+      "weight_percent": 20.78,
+      "interest_rate": 8.35,
+      "interest_earned": 17347,
+      "maturity_amount": 225102,
+      "dicgc_insured": true,
+      "rating": "AAA"
+    }
   ],
   "summary": {
     "total_investment": 1000000,
     "total_interest_earned": 82008,
     "total_maturity_amount": 1082008,
-    "expected_annual_return_pct": 8.20
+    "expected_annual_return_pct": 8.20,
+    "banks_used": 8,
+    "dicgc_fully_compliant": true
   },
-  "ladder": [...],
-  "pso": true,
-  "timestamp": "2026-04-20T18:00:00"
+  "comparison_rows": [
+    { "instrument": "FD (Best)", "pre_tax_pct": 8.20, "post_tax_pct": 5.74, "real_return_pct": 0.23, "risk_score": 2, "liquidity_score": 7 },
+    { "instrument": "SGB",       "pre_tax_pct": 10.55,"post_tax_pct": 9.80, "real_return_pct": 4.08, "risk_score": 3, "liquidity_score": 4 },
+    { "instrument": "PPF",       "pre_tax_pct": 7.10, "post_tax_pct": 7.10, "real_return_pct": 1.52, "risk_score": 1, "liquidity_score": 3 }
+  ],
+  "comparison_text": "...",
+  "inflation_used": 5.5,
+  "bank_recommendation": "...",
+  "rate_decision": "..."
 }
 ```
 
 ---
 
-## How the 2 Browser Agents Work
+## FD vs Alternatives Comparator
 
-| Agent | Symbol | What it does |
-|-------|--------|--------------|
-| Bank Selection Agent | β | Ranks PSO output · recommends short/anchor rungs · checks DICGC caps · stress-tests −25 bps shock |
-| Rate Decision Agent | ρ | Advises on timing (wait vs book) · flags low-rate banks · watchlist · long-term rung call |
+Compares Fixed Deposits against 4 other instruments using tax-adjusted and inflation-adjusted real returns:
 
-Both read `optimizeResult` from `sessionStorage` and update their reasoning cards live after every optimization run. Timestamp shows exactly when the last run happened.
+| Instrument | Tax Treatment | Notes |
+|---|---|---|
+| FD (Best) | Taxed at income slab | DICGC insured up to ₹5L per bank |
+| Debt Mutual Fund | Taxed at income slab (post Apr 2023) | No lock-in, high liquidity |
+| SGB (Sovereign Gold Bond) | Gold appreciation tax-free at maturity; 2.5% coupon taxed at slab | 8-year maturity |
+| Recurring Deposit | Taxed at income slab | Monthly commitment |
+| PPF | EEE — fully exempt | 15-year lock-in |
+
+**Real return formula:** `((1 + nominal) / (1 + inflation)) - 1` (Fisher equation)
+
+CPI inflation fetched live from data.gov.in; falls back to **5.5%** if unavailable.
+
+---
+
+## AI Agents
+
+| Agent | What it does |
+|-------|--------------|
+| Bank Selection Agent | Recommends banks based on risk profile, tenure, ratings |
+| Rate Decision Agent | Advises book-now vs wait based on RBI policy cycle |
+| Comparator Agent | Calculates post-tax real returns across 5 instruments |
 
 ---
 
@@ -202,11 +244,12 @@ Both read `optimizeResult` from `sessionStorage` and update their reasoning card
 
 ## Why Not Full CrewAI?
 
-CrewAI builds ~29,000 token prompts per pipeline run. Groq free tier allows 6,000 tokens/minute — a single CrewAI run exceeds that limit 5x.
+CrewAI builds ~29,000 token prompts per pipeline run. Groq free tier allows 6,000 tokens/minute — a single CrewAI run exceeds that limit 5×.
 
 The hybrid approach uses ~500 tokens per run (98% reduction):
 - PSO handles all math (no LLM needed)
-- One direct Groq call generates personalized advisory tips
+- Comparator agent runs pure Python (no LLM)
+- One direct Groq call for bank & rate advisory
 - Result: same quality, always within free tier limits
 
 ---

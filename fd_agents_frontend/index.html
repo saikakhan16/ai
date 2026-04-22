@@ -3,120 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FD Portfolio Optimizer Pro - Advanced Analytics Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>FD Portfolio Optimizer - Intelligent Fixed Deposit Allocation</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- SIDEBAR NAVIGATION -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-chart-pie"></i> FD Pro</h2>
-                <p>Portfolio Optimizer</p>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 FD Portfolio Optimizer</h1>
+                <p>Intelligent Fixed Deposit Allocation with AI Recommendations</p>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link active" data-tab="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="#" class="nav-link" data-tab="optimizer"><i class="fas fa-calculator"></i> Optimizer</a></li>
-                <li><a href="#" class="nav-link" data-tab="scenarios"><i class="fas fa-compare"></i> Scenarios</a></li>
-                <li><a href="#" class="nav-link" data-tab="analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
-                <li><a href="#" class="nav-link" data-tab="banks"><i class="fas fa-building"></i> Banks</a></li>
-                <li><a href="#" class="nav-link" data-tab="tax"><i class="fas fa-receipt"></i> Tax Calculator</a></li>
-            </ul>
-        </nav>
+            <div id="apiStatus" class="api-badge api-offline">● API Offline</div>
+        </header>
 
-        <!-- MAIN CONTENT -->
-        <main class="main-wrapper">
-            <!-- TOP BAR -->
-            <div class="top-bar">
-                <div class="top-bar-left">
-                    <button class="menu-toggle" id="menuToggle">
-                        <i class="fas fa-bars"></i>
+        <main class="main-content">
+            <!-- LEFT SIDE: FORM -->
+            <section class="form-section">
+                <h2>📝 Your Investment Details</h2>
+                <form id="optimizeForm">
+                    <div class="form-group">
+                        <label for="amount">
+                            💵 Investment Amount (Rs)
+                            <span class="amount-display">₹<span id="amountValue">1000000</span></span>
+                        </label>
+                        <input type="range" id="amountRange" min="100000" max="10000000" step="100000" value="1000000" class="slider">
+                        <input type="number" id="amount" value="1000000" min="100000" max="10000000" class="input-number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tenure">⏱️ Tenure (Months)</label>
+                        <select id="tenure" required>
+                            <option value="3">3 months</option>
+                            <option value="6">6 months</option>
+                            <option value="12" selected>12 months (1 year)</option>
+                            <option value="18">18 months</option>
+                            <option value="24">24 months (2 years)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📊 Risk Profile</label>
+                        <div class="risk-options">
+                            <label class="risk-label">
+                                <input type="radio" name="risk" value="conservative"> Conservative (Safe)
+                            </label>
+                            <label class="risk-label">
+                                <input type="radio" name="risk" value="moderate" checked> Moderate (Balanced)
+                            </label>
+                            <label class="risk-label">
+                                <input type="radio" name="risk" value="aggressive"> Aggressive (High Return)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taxSlab">🧾 Tax Slab</label>
+                        <select id="taxSlab">
+                            <option value="0">0% (No Tax)</option>
+                            <option value="5">5%</option>
+                            <option value="20">20%</option>
+                            <option value="30" selected>30% (Highest)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        🚀 Optimize My Portfolio
                     </button>
-                    <h1 id="pageTitle">Dashboard</h1>
+                </form>
+
+                <div class="info-box">
+                    <h3>ℹ️ Why Use This?</h3>
+                    <ul>
+                        <li>✅ Mathematically optimized allocation using PSO Algorithm</li>
+                        <li>✅ Spread across 8 banks for maximum safety (DICGC compliant)</li>
+                        <li>✅ AI-powered bank selection and timing recommendations</li>
+                        <li>✅ Instant tax calculations (Form 15G/15H)</li>
+                        <li>✅ FD vs Alternatives comparison (Debt MF, SGB, PPF, RD)</li>
+                    </ul>
                 </div>
-                <div class="top-bar-right">
-                    <div class="search-box">
-                        <input type="text" placeholder="Search banks...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="user-profile">
-                        <img src="https://via.placeholder.com/40" alt="User">
-                        <span>Investor</span>
-                    </div>
+            </section>
+
+            <!-- RIGHT SIDE: RESULTS -->
+            <section class="results-section">
+                <div id="loadingSpinner" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Analyzing FD rates and optimizing your portfolio...</p>
                 </div>
-            </div>
 
-            <!-- CONTENT AREA -->
-            <div class="content">
-                <!-- DASHBOARD TAB -->
-                <section id="dashboard" class="tab-content active">
-                    <!-- KEY METRICS -->
-                    <div class="metrics-grid">
-                        <div class="metric-card">
-                            <div class="metric-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <div class="metric-content">
-                                <p class="metric-label">Total Investment</p>
-                                <h3 class="metric-value" id="dashInvestment">₹0</h3>
-                                <p class="metric-change">From your portfolio</p>
-                            </div>
+                <div id="resultsContainer" class="results-container hidden">
+                    <!-- SUMMARY CARD -->
+                    <div class="summary-card">
+                        <div class="summary-item">
+                            <span class="label">Total Investment</span>
+                            <span class="value" id="summaryInvestment">₹0</span>
                         </div>
-
-                        <div class="metric-card">
-                            <div class="metric-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                <i class="fas fa-arrow-up"></i>
-                            </div>
-                            <div class="metric-content">
-                                <p class="metric-label">Expected Return</p>
-                                <h3 class="metric-value" id="dashReturn">0%</h3>
-                                <p class="metric-change">Annual return rate</p>
-                            </div>
+                        <div class="summary-item">
+                            <span class="label">Annual Return</span>
+                            <span class="value highlight" id="summaryReturn">0%</span>
                         </div>
-
-                        <div class="metric-card">
-                            <div class="metric-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                                <i class="fas fa-coins"></i>
-                            </div>
-                            <div class="metric-content">
-                                <p class="metric-label">Interest Earned</p>
-                                <h3 class="metric-value" id="dashInterest">₹0</h3>
-                                <p class="metric-change">Net earnings</p>
-                            </div>
+                        <div class="summary-item">
+                            <span class="label">Interest Earned</span>
+                            <span class="value" id="summaryInterest">₹0</span>
                         </div>
-
-                        <div class="metric-card">
-                            <div class="metric-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                                <i class="fas fa-piggy-bank"></i>
-                            </div>
-                            <div class="metric-content">
-                                <p class="metric-label">Maturity Amount</p>
-                                <h3 class="metric-value" id="dashMaturity">₹0</h3>
-                                <p class="metric-change">Final amount received</p>
-                            </div>
+                        <div class="summary-item">
+                            <span class="label">Maturity Amount</span>
+                            <span class="value highlight" id="summaryMaturity">₹0</span>
                         </div>
                     </div>
 
-                    <!-- CHARTS ROW -->
-                    <div class="charts-row">
-                        <div class="chart-container">
-                            <h3><i class="fas fa-pie-chart"></i> Portfolio Allocation</h3>
-                            <canvas id="allocationChart"></canvas>
-                        </div>
-
-                        <div class="chart-container">
-                            <h3><i class="fas fa-graph"></i> Returns by Bank</h3>
-                            <canvas id="returnsChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- LATEST RESULTS TABLE -->
-                    <div class="card">
-                        <h3><i class="fas fa-history"></i> Latest Optimization Results</h3>
+                    <!-- ALLOCATION TABLE -->
+                    <div class="section-card">
+                        <h3>📊 Your Optimal Allocation</h3>
                         <div class="table-responsive">
-                            <table id="dashboardTable" class="data-table">
+                            <table class="allocation-table">
                                 <thead>
                                     <tr>
                                         <th>Bank Name</th>
@@ -124,366 +123,79 @@
                                         <th>Rate</th>
                                         <th>Interest</th>
                                         <th>Maturity</th>
-                                        <th>Safety</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dashboardTableBody">
-                                    <tr>
-                                        <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
-                                            No data yet. Run an optimization to see results.
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- OPTIMIZER TAB -->
-                <section id="optimizer" class="tab-content">
-                    <div class="optimizer-layout">
-                        <!-- FORM PANEL -->
-                        <div class="optimizer-form">
-                            <div class="card">
-                                <h3><i class="fas fa-sliders-h"></i> Portfolio Parameters</h3>
-                                <form id="optimizeForm">
-                                    <div class="form-section">
-                                        <label>💵 Investment Amount</label>
-                                        <div class="amount-control">
-                                            <input type="range" id="amountRange" min="100000" max="10000000" step="100000" value="1000000" class="slider">
-                                            <input type="number" id="amount" value="1000000" class="input-field">
-                                            <span class="currency">₹</span>
-                                        </div>
-                                        <div class="preset-amounts">
-                                            <button type="button" class="preset-btn" data-amount="500000">5L</button>
-                                            <button type="button" class="preset-btn" data-amount="1000000">10L</button>
-                                            <button type="button" class="preset-btn" data-amount="2500000">25L</button>
-                                            <button type="button" class="preset-btn" data-amount="5000000">50L</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-section">
-                                        <label>⏱️ Tenure</label>
-                                        <div class="tenure-grid">
-                                            <label class="tenure-card">
-                                                <input type="radio" name="tenure" value="6">
-                                                <div class="tenure-content">
-                                                    <strong>6M</strong>
-                                                    <small>6 months</small>
-                                                </div>
-                                            </label>
-                                            <label class="tenure-card">
-                                                <input type="radio" name="tenure" value="12" checked>
-                                                <div class="tenure-content">
-                                                    <strong>1Y</strong>
-                                                    <small>12 months</small>
-                                                </div>
-                                            </label>
-                                            <label class="tenure-card">
-                                                <input type="radio" name="tenure" value="18">
-                                                <div class="tenure-content">
-                                                    <strong>18M</strong>
-                                                    <small>18 months</small>
-                                                </div>
-                                            </label>
-                                            <label class="tenure-card">
-                                                <input type="radio" name="tenure" value="24">
-                                                <div class="tenure-content">
-                                                    <strong>2Y</strong>
-                                                    <small>24 months</small>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-section">
-                                        <label>📊 Risk Profile</label>
-                                        <div class="risk-grid">
-                                            <label class="risk-card">
-                                                <input type="radio" name="risk" value="conservative">
-                                                <div class="risk-content">
-                                                    <i class="fas fa-shield-alt"></i>
-                                                    <strong>Conservative</strong>
-                                                    <small>Low risk, stable returns</small>
-                                                </div>
-                                            </label>
-                                            <label class="risk-card">
-                                                <input type="radio" name="risk" value="moderate" checked>
-                                                <div class="risk-content">
-                                                    <i class="fas fa-balance-scale"></i>
-                                                    <strong>Moderate</strong>
-                                                    <small>Balanced approach</small>
-                                                </div>
-                                            </label>
-                                            <label class="risk-card">
-                                                <input type="radio" name="risk" value="aggressive">
-                                                <div class="risk-content">
-                                                    <i class="fas fa-rocket"></i>
-                                                    <strong>Aggressive</strong>
-                                                    <small>Higher returns</small>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn-primary btn-large">
-                                        <i class="fas fa-rocket"></i> Optimize Portfolio
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- RESULTS PANEL -->
-                        <div class="optimizer-results">
-                            <div id="optimizerLoading" class="loading-state hidden">
-                                <div class="spinner"></div>
-                                <p>Optimizing your portfolio...</p>
-                            </div>
-
-                            <div id="optimizerResults" class="hidden">
-                                <!-- SUMMARY -->
-                                <div class="card">
-                                    <h3>Portfolio Summary</h3>
-                                    <div class="summary-grid">
-                                        <div class="summary-item">
-                                            <span class="label">Investment</span>
-                                            <span class="value" id="optInvestment">₹0</span>
-                                        </div>
-                                        <div class="summary-item">
-                                            <span class="label">Annual Return</span>
-                                            <span class="value highlight" id="optReturn">0%</span>
-                                        </div>
-                                        <div class="summary-item">
-                                            <span class="label">Interest</span>
-                                            <span class="value" id="optInterest">₹0</span>
-                                        </div>
-                                        <div class="summary-item">
-                                            <span class="label">Maturity</span>
-                                            <span class="value highlight" id="optMaturity">₹0</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- ALLOCATION TABLE -->
-                                <div class="card">
-                                    <h3>Optimal Allocation</h3>
-                                    <div class="table-responsive">
-                                        <table id="optimizerTable" class="data-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Bank</th>
-                                                    <th>Amount</th>
-                                                    <th>Rate</th>
-                                                    <th>Interest</th>
-                                                    <th>Maturity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="optimizerTableBody">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- AI RECOMMENDATIONS -->
-                                <div class="card">
-                                    <h3><i class="fas fa-robot"></i> AI Agent Recommendations</h3>
-                                    <div class="agents-grid">
-                                        <div class="agent-panel agent-1">
-                                            <h4>🏦 Bank Selection (Agent 1)</h4>
-                                            <div id="optAgentBank" class="agent-text">Loading...</div>
-                                        </div>
-                                        <div class="agent-panel agent-2">
-                                            <h4>📈 Rate Decision (Agent 2)</h4>
-                                            <div id="optAgentRate" class="agent-text">Loading...</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="optimizerError" class="error-box hidden">
-                                <p id="optimizerErrorText"></p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SCENARIOS TAB -->
-                <section id="scenarios" class="tab-content">
-                    <div class="card">
-                        <h3><i class="fas fa-compare"></i> Compare Scenarios</h3>
-                        <div class="scenarios-container">
-                            <div class="scenario-builder">
-                                <h4>Create Comparison Scenarios</h4>
-                                <div class="scenario-form">
-                                    <input type="text" id="scenarioName" placeholder="e.g., Conservative Plan" class="input-field">
-                                    <input type="number" id="scenarioAmount" value="1000000" class="input-field" placeholder="Amount">
-                                    <select id="scenarioTenure" class="input-field">
-                                        <option value="6">6 months</option>
-                                        <option value="12" selected>12 months</option>
-                                        <option value="18">18 months</option>
-                                        <option value="24">24 months</option>
-                                    </select>
-                                    <select id="scenarioRisk" class="input-field">
-                                        <option value="conservative">Conservative</option>
-                                        <option value="moderate" selected>Moderate</option>
-                                        <option value="aggressive">Aggressive</option>
-                                    </select>
-                                    <button type="button" class="btn-secondary" id="addScenarioBtn">
-                                        <i class="fas fa-plus"></i> Add Scenario
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="scenarios-comparison">
-                                <h4>Your Scenarios</h4>
-                                <div id="scenariosList" class="scenarios-list">
-                                    <p style="color: #999;">No scenarios yet. Create one above.</p>
-                                </div>
-                                <button class="btn-primary" id="compareScenariosBtn" style="display: none;">
-                                    <i class="fas fa-chart-bar"></i> Compare Selected
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="scenariosChart" class="hidden" style="margin-top: 30px;">
-                            <h4>Scenarios Comparison</h4>
-                            <canvas id="comparisonChart"></canvas>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ANALYTICS TAB -->
-                <section id="analytics" class="tab-content">
-                    <div class="analytics-grid">
-                        <div class="card">
-                            <h3><i class="fas fa-chart-line"></i> Returns Over Time</h3>
-                            <canvas id="returnsTimeChart"></canvas>
-                        </div>
-                        <div class="card">
-                            <h3><i class="fas fa-percent"></i> Rate Distribution</h3>
-                            <canvas id="rateDistributionChart"></canvas>
-                        </div>
-                        <div class="card">
-                            <h3><i class="fas fa-info-circle"></i> Market Insights</h3>
-                            <div class="insights-list">
-                                <div class="insight">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>RBI Policy Rate is at 6.5% (High)</span>
-                                </div>
-                                <div class="insight">
-                                    <i class="fas fa-chart-bar"></i>
-                                    <span>FD Rates near peak (8.2-8.5%)</span>
-                                </div>
-                                <div class="insight">
-                                    <i class="fas fa-trend"></i>
-                                    <span>Inflation at 4.8% - Good real returns</span>
-                                </div>
-                                <div class="insight">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Best time to lock in rates</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- BANKS TAB -->
-                <section id="banks" class="tab-content">
-                    <div class="card">
-                        <h3><i class="fas fa-building"></i> FD Rates by Bank</h3>
-                        <div class="banks-filter">
-                            <input type="text" id="bankSearch" placeholder="Search banks..." class="input-field">
-                            <select id="bankTenureFilter" class="input-field">
-                                <option value="">All Tenures</option>
-                                <option value="6">6 months</option>
-                                <option value="12">12 months</option>
-                                <option value="18">18 months</option>
-                                <option value="24">24 months</option>
-                            </select>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="banksTable" class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Bank Name</th>
-                                        <th>Type</th>
-                                        <th>6M Rate</th>
-                                        <th>12M Rate</th>
-                                        <th>18M Rate</th>
-                                        <th>24M Rate</th>
                                         <th>DICGC</th>
                                     </tr>
                                 </thead>
-                                <tbody id="banksTableBody">
-                                    <tr>
-                                        <td colspan="7" style="text-align: center; padding: 30px;">Loading bank data...</td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="allocationBody"></tbody>
                             </table>
                         </div>
                     </div>
-                </section>
 
-                <!-- TAX CALCULATOR TAB -->
-                <section id="tax" class="tab-content">
-                    <div class="card">
-                        <h3><i class="fas fa-calculator"></i> Tax & Compliance Calculator</h3>
-                        <div class="tax-calculator">
-                            <div class="tax-section">
-                                <h4>Tax Details</h4>
-                                <div class="tax-form">
-                                    <label>
-                                        Total Interest Income:
-                                        <input type="number" id="taxIncome" value="0" readonly class="input-field">
-                                    </label>
-                                    <label>
-                                        Your Tax Slab:
-                                        <select id="taxSlab" class="input-field">
-                                            <option value="0">Form 15G (Nil tax)</option>
-                                            <option value="5">5% Slab</option>
-                                            <option value="20">20% Slab</option>
-                                            <option value="30">30% Slab</option>
-                                        </select>
-                                    </label>
-                                </div>
-                            </div>
+                    <!-- FD vs ALTERNATIVES COMPARATOR -->
+                    <div class="section-card" id="comparatorCard" style="display:none">
+                        <h3>⚖️ FD vs Alternatives Comparator</h3>
+                        <p id="comparatorMeta" class="comp-meta"></p>
+                        <div class="table-responsive">
+                            <table class="allocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Instrument</th>
+                                        <th>Pre-tax %</th>
+                                        <th>Post-tax %</th>
+                                        <th>Real Return %</th>
+                                        <th>Risk /10</th>
+                                        <th>Liquidity /10</th>
+                                        <th>Horizon</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparatorBody"></tbody>
+                            </table>
+                        </div>
+                        <div id="comparatorRec" class="comp-rec"></div>
+                    </div>
 
-                            <div class="tax-summary">
-                                <h4>Tax Summary</h4>
-                                <div class="tax-item">
-                                    <span>Gross Interest</span>
-                                    <span id="taxGross">₹0</span>
-                                </div>
-                                <div class="tax-item">
-                                    <span>Income Tax</span>
-                                    <span id="taxAmount">₹0</span>
-                                </div>
-                                <div class="tax-item">
-                                    <span>Cess (4%)</span>
-                                    <span id="taxCessAmount">₹0</span>
-                                </div>
-                                <div class="tax-item highlight">
-                                    <span>Net Amount</span>
-                                    <span id="taxNet">₹0</span>
-                                </div>
-                            </div>
-
-                            <div class="tax-docs">
-                                <h4>📄 Required Documents</h4>
-                                <ul>
-                                    <li><strong>Form 15G:</strong> If total income is below slab exemption limit</li>
-                                    <li><strong>Form 15H:</strong> For senior citizens (age 60+)</li>
-                                    <li><strong>PAN Card:</strong> Always required for FD opening</li>
-                                    <li><strong>Bank Statements:</strong> For FD opening and maturity tracking</li>
-                                </ul>
-                            </div>
+                    <!-- AI AGENTS RECOMMENDATIONS -->
+                    <div class="agents-section">
+                        <h3>🤖 AI Agent Recommendations</h3>
+                        <div class="agent-card agent-1">
+                            <h4>🏦 Agent 1: Bank Recommendation</h4>
+                            <div id="agentBankRec" class="agent-content"></div>
+                        </div>
+                        <div class="agent-card agent-2">
+                            <h4>📈 Agent 2: Rate Decision</h4>
+                            <div id="agentRateDec" class="agent-content"></div>
                         </div>
                     </div>
-                </section>
-            </div>
+
+                    <!-- KEY ACTIONS -->
+                    <div class="section-card actions-card">
+                        <h3>✅ Key Actions for You</h3>
+                        <ol>
+                            <li>Book FDs per the allocation above (split across banks as shown)</li>
+                            <li>Submit Form 15G at the start of next financial year (April 1)</li>
+                            <li>Set calendar reminders for each FD maturity date</li>
+                            <li>On maturity, re-evaluate rates for next investment</li>
+                        </ol>
+                    </div>
+
+                    <!-- RECOMMENDATION BANNER -->
+                    <div class="recommendation-banner">
+                        <p id="recommendationText">Book NOW — FD rates are near their cycle peak</p>
+                    </div>
+                </div>
+
+                <div id="errorContainer" class="error-container hidden">
+                    <p id="errorMessage"></p>
+                    <button onclick="location.reload()" class="btn-retry">Try Again</button>
+                </div>
+            </section>
         </main>
+
+        <footer class="footer">
+            <p>🔒 Secure • 📊 Data-Driven • 🎯 DICGC Compliant | Powered by PSO Algorithm & AI Agents</p>
+        </footer>
     </div>
 
-    <script src="advanced-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

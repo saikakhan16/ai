@@ -133,7 +133,7 @@
 
 <script src="assets/shell.js?v=2"></script>
 <script>
-const API_BASE = 'http://localhost:8001';
+const API_BASE = 'http://localhost:8002';
 
 // State
 let state = {
@@ -227,6 +227,7 @@ async function runOptimizer() {
         amount: state.amount,
         risk_profile: state.risk,
         tenure_months: state.tenure,
+        tax_slab_pct: state.tax,
         name: 'Investor'
       })
     });

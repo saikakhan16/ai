@@ -61,6 +61,13 @@ Next Steps
 ==========
 Walk into any of the listed banks or use their app/Blostem platform to book these FDs today.
 """
+
+    # Include comparator output when available
+    if "comparison" in d and d["comparison"]:
+        cmp = d["comparison"]
+        report += "\n" + cmp.get("table_text", "") + "\n"
+        report += cmp.get("recommendation", "") + "\n"
+
     return report
 
 

@@ -14,6 +14,7 @@ if sys.platform == 'win32':
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 from agents.pso_optimizer import _run_pso_optimization
+from agents.comparator_agent import _compare_investment_alternatives
 
 
 def _get_groq_advice(user_input: dict, pso_data: dict) -> str:
@@ -62,7 +63,8 @@ def run_fd_crew(user_input: dict) -> dict:
     Hybrid pipeline:
       Agent 1 — Data Collector  : embedded bank data (no LLM needed)
       Agent 2 — PSO Optimizer   : pure Python algorithm (no LLM needed)
-      Agent 3 — User Advisor    : single compact Groq LLM call (~500 tokens)
+      Agent 3 — Comparator      : FD vs Alternatives (no LLM needed)
+      Agent 4 — User Advisor    : single compact Groq LLM call (~500 tokens)
     """
     # ── Agent 1: Data (already baked into PSO) ──────────────────────
     pso_params = json.dumps({
@@ -74,7 +76,16 @@ def run_fd_crew(user_input: dict) -> dict:
     # ── Agent 2: PSO Optimization ────────────────────────────────────
     pso_data = json.loads(_run_pso_optimization(pso_params))
 
-    # ── Agent 3: AI Advisory (single LLM call) ───────────────────────
+    # ── Agent 3: FD vs Alternatives Comparator (runs after PSO) ──────
+    # Default tax_slab_pct to 30% if not provided by caller
+    user_input.setdefault("tax_slab_pct", 30)
+    comparison_result = None
+    try:
+        comparison_result = _compare_investment_alternatives(user_input, pso_data)
+    except Exception as e:
+        print(f"[Comparator] Non-fatal error — skipping comparison section: {e}")
+
+    # ── Agent 4: AI Advisory (single LLM call) ───────────────────────
     advice = _get_groq_advice(user_input, pso_data)
 
     # ── Format final report ──────────────────────────────────────────
@@ -117,11 +128,26 @@ def run_fd_crew(user_input: dict) -> dict:
         f"================",
         advice,
         f"",
-        f"[Powered by PSO Algorithm + Groq Llama 3.1 8B]",
+    ]
+
+    # ── Comparator section (appended after PSO report) ────────────────
+    if comparison_result:
+        lines += [
+            comparison_result["table_text"],
+            comparison_result["recommendation"],
+            f"",
+        ]
+
+    lines += [
+        f"[Powered by PSO Algorithm + Groq Llama 3.1 8B + FD Comparator]",
     ]
 
     report = "\n".join(lines)
-    return {"report": report, "pso_data": pso_data}
+    return {
+        "report": report,
+        "pso_data": pso_data,
+        "comparison": comparison_result,
+    }
 
 
 if __name__ == "__main__":
@@ -134,7 +160,8 @@ if __name__ == "__main__":
         "amount": 1000000,
         "risk_profile": "moderate",
         "tenure_months": 12,
-        "name": "Demo User"
+        "name": "Demo User",
+        "tax_slab_pct": 30,
     }
 
     print(f"User Request:\n{json.dumps(user_request, indent=2)}\n")

@@ -223,6 +223,34 @@
           </g>
         </svg>
       </div>
+
+      <!-- FD vs ALTERNATIVES COMPARATOR -->
+      <div class="card span-12" id="comparatorCard" style="display:none;">
+        <div class="card-head">
+          <div>
+            <div class="card-title">⚖️ FD vs Alternatives</div>
+            <div class="card-sub" id="comparatorMeta">Tax-adjusted · inflation-adjusted real returns</div>
+          </div>
+          <span class="tag lime">AI Analysis</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:13px;">
+            <thead>
+              <tr style="border-bottom:1px solid oklch(1 0 0 / 0.07);">
+                <th style="padding:10px 14px; text-align:left; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Instrument</th>
+                <th style="padding:10px 14px; text-align:right; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Pre-tax %</th>
+                <th style="padding:10px 14px; text-align:right; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Post-tax %</th>
+                <th style="padding:10px 14px; text-align:right; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Real Return %</th>
+                <th style="padding:10px 14px; text-align:right; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Risk /10</th>
+                <th style="padding:10px 14px; text-align:right; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Liquidity /10</th>
+                <th style="padding:10px 14px; text-align:left; color:var(--ink-3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.07em;">Horizon</th>
+              </tr>
+            </thead>
+            <tbody id="comparatorBody"></tbody>
+          </table>
+        </div>
+        <div id="comparatorRec" style="margin-top:16px; padding:14px 18px; border-radius:10px; background:oklch(0.88 0.18 130 / 0.08); border:1px solid oklch(0.88 0.18 130 / 0.2); font-size:12.5px; color:var(--ink-2); white-space:pre-line; line-height:1.7;"></div>
+      </div>
     </div>
   </div>
 
@@ -388,6 +416,32 @@ if (result && params) {
   const rateOpts = document.querySelectorAll('.rate-opt .h');
   if (rateOpts[0]) rateOpts[0].innerHTML = blended.toFixed(2) + '% <span style="color:var(--ink-3); font-size:13px;">blended</span>';
   if (rateOpts[1]) rateOpts[1].innerHTML = (blended + 0.20).toFixed(2) + '% <span style="color:var(--ink-3); font-size:13px;">est.</span>';
+
+  // FD vs Alternatives Comparator
+  if (result.comparison_rows && result.comparison_rows.length) {
+    document.getElementById('comparatorCard').style.display = 'block';
+    document.getElementById('comparatorMeta').textContent =
+      'Tax Slab: ' + tax + '%  ·  Inflation (CPI): ' + (result.inflation_used || 5.5) + '%  ·  Tenure: ' + tenure + ' months';
+
+    const best = result.comparison_rows.reduce((a, b) => b.real_return_pct > a.real_return_pct ? b : a);
+    const tbody = document.getElementById('comparatorBody');
+    tbody.innerHTML = result.comparison_rows.map(r => {
+      const isBest = r.instrument === best.instrument;
+      const realColor = r.real_return_pct >= 0 ? 'var(--lime)' : 'oklch(0.72 0.16 20)';
+      return `<tr style="border-bottom:1px solid oklch(1 0 0 / 0.05);${isBest ? 'background:oklch(1 0 0 / 0.03);' : ''}">
+        <td style="padding:12px 14px; font-weight:${isBest ? '600' : '400'}; color:var(--ink);">${r.instrument}${isBest ? ' ⭐' : ''}</td>
+        <td style="padding:12px 14px; text-align:right; color:var(--ink-2);" class="mono">${r.pre_tax_pct.toFixed(2)}%</td>
+        <td style="padding:12px 14px; text-align:right; color:var(--ink-2);" class="mono">${r.post_tax_pct.toFixed(2)}%</td>
+        <td style="padding:12px 14px; text-align:right; color:${realColor}; font-weight:600;" class="mono">${r.real_return_pct.toFixed(2)}%</td>
+        <td style="padding:12px 14px; text-align:right; color:var(--ink-3);">${r.risk_score}/10</td>
+        <td style="padding:12px 14px; text-align:right; color:var(--ink-3);">${r.liquidity_score}/10</td>
+        <td style="padding:12px 14px; color:var(--ink-3); font-size:11.5px;">${r.horizon}</td>
+      </tr>`;
+    }).join('');
+
+    const recMatch = (result.comparison_text || '').match(/INVESTMENT RECOMMENDATION[\s\S]*/);
+    if (recMatch) document.getElementById('comparatorRec').textContent = recMatch[0];
+  }
 }
 </script>
 </body>

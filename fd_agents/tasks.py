@@ -1,5 +1,5 @@
 """
-CrewAI Task Definitions (Simplified 3-Agent Version)
+CrewAI Task Definitions (4-Agent Version)
 Each task maps to one agent with a clear expected output.
 Tasks are chained — later tasks receive context from earlier ones.
 """
@@ -59,6 +59,37 @@ def optimize_portfolio_task(agent, user_input: dict, context: list) -> Task:
         """,
         agent=agent,
         context=context
+    )
+
+
+def comparison_task(agent, user_input: dict, context: list) -> Task:
+    """Task for the FD vs Alternatives Comparator Agent."""
+    return Task(
+        description=f"""
+        Compare Fixed Deposits against alternative investment instruments.
+
+        User profile:
+        - Tax slab: {user_input.get('tax_slab_pct', 30)}%
+        - Tenure: {user_input.get('tenure_months', 12)} months
+        - Risk profile: {user_input.get('risk_profile', 'moderate')}
+        - Investment amount: Rs{user_input.get('amount', 1000000):,}
+
+        Use the compare_investment_alternatives tool to:
+        1. Calculate pre-tax and post-tax returns for FD, Debt MF, SGB, RD, PPF
+        2. Fetch current CPI inflation for real-return calculation (fallback 5.5%)
+        3. Score each instrument on risk (1-10) and liquidity (1-10)
+        4. Generate a comparison table and a personalised allocation recommendation
+        """,
+        expected_output="""
+        Comparison table showing all 5 instruments with:
+        - Pre-tax returns
+        - Post-tax returns at user's slab
+        - Inflation-adjusted real returns
+        - Risk score (1-10) and Liquidity score (1-10)
+        - Allocation recommendation with instruments to avoid
+        """,
+        agent=agent,
+        context=context,
     )
 
 
