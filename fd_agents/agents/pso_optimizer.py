@@ -4,8 +4,6 @@ Runs the Particle Swarm Optimization algorithm as a CrewAI tool.
 This is the mathematical core — allocates funds across banks to maximize returns.
 """
 
-from crewai import Agent
-from crewai.tools import tool
 import json
 import math
 import random
@@ -168,78 +166,3 @@ def _run_pso_optimization(params: str) -> str:
     return json.dumps(result, indent=2)
 
 
-# CrewAI Tool wrapper
-@tool("run_pso_optimization")
-def run_pso_optimization(params: str) -> str:
-    """
-    Runs Particle Swarm Optimization to find optimal FD allocation.
-    
-    Input params (JSON string):
-    {
-        "total_amount": 1000000,
-        "risk_profile": "moderate",
-        "tenure_months": 12,
-        "banks": [...]
-    }
-    
-    Returns optimal allocation across all banks with expected returns.
-    """
-    return _run_pso_optimization(params)
-
-
-@tool("build_fd_ladder")
-def build_fd_ladder(allocation_json: str) -> str:
-    """
-    Takes an allocation result and builds a staggered FD ladder
-    across 3, 6, 9, and 12 month tenures for optimal liquidity.
-    """
-    try:
-        data = json.loads(allocation_json)
-        ladder = data.get("ladder_strategy", [])
-        grouped = {}
-        for item in ladder:
-            t = item["tenure_months"]
-            grouped.setdefault(t, []).append(item)
-
-        summary = []
-        for tenure in [3, 6, 9, 12]:
-            items = grouped.get(tenure, [])
-            total = sum(i["amount"] for i in items)
-            total_maturity = sum(i["maturity_amount"] for i in items)
-            summary.append({
-                "rung": f"{tenure}M",
-                "total_amount": round(total, 2),
-                "total_maturity": round(total_maturity, 2),
-                "fds": len(items),
-                "matures_in": f"{tenure} months"
-            })
-
-        return json.dumps({"ladder_rungs": summary, "detail": ladder}, indent=2)
-    except Exception as e:
-        return json.dumps({"error": str(e)})
-
-
-def build_pso_optimizer(llm) -> Agent:
-    return Agent(
-        role="Quantitative Portfolio Optimization Specialist",
-        goal=(
-            "Run the Particle Swarm Optimization algorithm with 60 particles across "
-            "8 banks to find the mathematically optimal allocation that maximizes "
-            "returns while respecting DICGC insurance limits and risk concentration rules. "
-            "Also build the FD ladder strategy for liquidity management."
-        ),
-        backstory=(
-            "You are a quant with a PhD in computational optimization from IIT Bombay. "
-            "You've applied PSO, genetic algorithms, and simulated annealing to portfolio "
-            "problems across equities, bonds, and fixed income. "
-            "You treat every allocation as a constrained optimization problem — "
-            "emotions don't enter your calculations, only math. "
-            "Your PSO implementation has been benchmarked against classical mean-variance "
-            "optimization and consistently outperforms it on real-world constraints."
-        ),
-        tools=[run_pso_optimization, build_fd_ladder],
-        llm=llm,
-        verbose=True,
-        allow_delegation=False,
-        max_iter=3,
-    )

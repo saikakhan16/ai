@@ -4,8 +4,6 @@ Fetches and normalizes live FD rates from all Blostem partner banks.
 Uses real bank data + simulated live fetch (swap with real scraper in prod).
 """
 
-from crewai import Agent
-from crewai.tools import tool
 import json
 from datetime import datetime
 
@@ -83,54 +81,3 @@ def _compare_bank_rates(tenure_months: str = "12") -> str:
     return json.dumps({"tenure_months": tenure, "ranked_banks": comparison}, indent=2)
 
 
-# CrewAI Tool versions (for agents)
-@tool("fetch_live_fd_rates")
-def fetch_live_fd_rates(query: str = "all") -> str:
-    """
-    Fetches current Fixed Deposit rates from all Blostem partner banks.
-    Returns structured JSON with rates for all tenures.
-    """
-    return _fetch_live_fd_rates(query)
-
-
-@tool("compare_bank_rates")
-def compare_bank_rates(tenure_months: str = "12") -> str:
-    """
-    Returns a ranked comparison of all banks for a specific tenure.
-    Pass tenure in months as a string: '3', '6', '9', '12', '18', or '24'.
-    """
-    return _compare_bank_rates(tenure_months)
-    comparison = []
-    for b in banks:
-        rate = b["rates"].get(tenure, b["rates"].get("12", 7.0))
-        comparison.append({
-            "bank": b["name"], "type": b["type"], "rating": b["rating"],
-            "rate": rate, "dicgc_protected": b["dicgc"]
-        })
-    comparison.sort(key=lambda x: x["rate"], reverse=True)
-    return json.dumps({"tenure_months": tenure, "ranked_banks": comparison}, indent=2)
-
-
-# ── AGENT ─────────────────────────────────────────────────────────────────────
-
-def build_data_collector(llm) -> Agent:
-    return Agent(
-        role="FD Rate Intelligence Analyst",
-        goal=(
-            "Fetch the latest Fixed Deposit rates from all 8 Blostem partner banks, "
-            "validate the data for accuracy, and present a clean structured dataset "
-            "for the optimization engine to use."
-        ),
-        backstory=(
-            "You are a meticulous data analyst who has built rate-monitoring systems "
-            "for three major wealth management firms. You know every Small Finance Bank "
-            "and NBFC in India, understand the difference between DICGC-insured deposits "
-            "and corporate FDs, and can spot anomalies in rate data instantly. "
-            "You deliver clean, validated JSON — never guesses."
-        ),
-        tools=[fetch_live_fd_rates, compare_bank_rates],
-        llm=llm,
-        verbose=True,
-        allow_delegation=False,
-        max_iter=3,
-    )

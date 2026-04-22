@@ -5,8 +5,6 @@ friendly, actionable report the user can actually understand and act on.
 Supports Hindi-English (Hinglish) if needed.
 """
 
-from crewai import Agent
-from crewai.tools import tool
 import json
 
 
@@ -71,56 +69,3 @@ Walk into any of the listed banks or use their app/Blostem platform to book thes
     return report
 
 
-@tool("generate_portfolio_report")
-def generate_portfolio_report(data: str) -> str:
-    """
-    Generates a human-readable portfolio report from optimization results.
-    Input: JSON string with allocation, tax, and market data combined.
-    """
-    return _generate_portfolio_report(data)
-
-
-@tool("simplify_for_user")
-def simplify_for_user(complex_data: str) -> str:
-    """
-    Takes complex financial data and returns a simple 5-point summary
-    that any user can understand — even without financial knowledge.
-    """
-    return json.dumps({
-        "in_simple_words": [
-            "Your money is split across multiple banks so even if one bank fails, your money is safe (DICGC insurance).",
-            "The AI found the combination of banks that gives you the highest interest rate possible.",
-            "You'll earn more interest than a regular savings account — significantly more.",
-            "The ladder strategy means some money becomes available every 3 months if you need it.",
-            "File Form 15G in April every year to avoid banks cutting 10% TDS from your interest."
-        ],
-        "bottom_line": "Your money works harder, stays safe, and remains partially liquid every 3 months.",
-        "next_step": "Walk into any of the listed banks (or use their app/Blostem platform) and book these FDs today."
-    }, indent=2)
-
-
-def build_user_advisor(llm) -> Agent:
-    return Agent(
-        role="Personal FD Investment Advisor",
-        goal=(
-            "Take all the technical outputs from the data, market, optimization, and tax agents "
-            "and synthesize them into a clear, warm, actionable investment report. "
-            "The user should walk away knowing exactly what to do, why, and what to expect. "
-            "No jargon. No confusion. Just clear guidance."
-        ),
-        backstory=(
-            "You are a SEBI-registered investment advisor who has helped over 5,000 middle-class "
-            "Indian families invest in fixed income products. "
-            "You have a gift for explaining complex financial concepts in simple language — "
-            "whether to a retired teacher in Patna or a software engineer in Bangalore. "
-            "You never overwhelm clients with numbers. You give them 3-5 clear actions "
-            "and the confidence to execute. "
-            "You understand that behind every investment is a real goal — a child's education, "
-            "a home, retirement security — and you keep that in mind always."
-        ),
-        tools=[generate_portfolio_report, simplify_for_user],
-        llm=llm,
-        verbose=True,
-        allow_delegation=False,
-        max_iter=3,
-    )
