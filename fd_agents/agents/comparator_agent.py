@@ -4,8 +4,6 @@ Compares Fixed Deposits against Debt MF, SGB, RD, and PPF.
 Calculates pre-tax, post-tax (at user's slab), and inflation-adjusted real returns.
 """
 
-from crewai import Agent
-from crewai.tools import tool
 import json
 import urllib.request
 
@@ -255,62 +253,3 @@ def _compare_investment_alternatives(user_input: dict, pso_data: dict) -> dict:
         "tax_slab_used":  tax_slab,
     }
 
-
-# ── CREWAI TOOL WRAPPER ──────────────────────────────────────────────────────
-
-@tool("compare_investment_alternatives")
-def compare_investment_alternatives(params: str) -> str:
-    """
-    Compares Fixed Deposits against Debt MF, SGB, RD, and PPF.
-
-    Input (JSON string):
-    {
-        "user_input": {
-            "tax_slab_pct": 30,
-            "tenure_months": 12,
-            "risk_profile": "moderate"
-        },
-        "fd_annual_return_pct": 8.25
-    }
-
-    Returns a formatted comparison table plus a personalised recommendation.
-    """
-    try:
-        p = json.loads(params) if isinstance(params, str) else params
-    except Exception:
-        p = {}
-
-    user_input = p.get("user_input", {})
-    fd_return  = float(p.get("fd_annual_return_pct", 7.5))
-    mock_pso   = {"summary": {"expected_annual_return_pct": fd_return}}
-
-    result = _compare_investment_alternatives(user_input, mock_pso)
-    return result["table_text"] + "\n" + result["recommendation"]
-
-
-# ── CREWAI AGENT BUILDER ─────────────────────────────────────────────────────
-
-def build_comparator_agent(llm) -> Agent:
-    """Build the CrewAI-compatible FD vs Alternatives Comparator Agent."""
-    return Agent(
-        role="Investment Alternatives Analyst",
-        goal=(
-            "Compare Fixed Deposits against Debt Mutual Funds, Sovereign Gold Bonds, "
-            "Recurring Deposits, and PPF. Calculate pre-tax, post-tax, and "
-            "inflation-adjusted real returns for the user's specific tax slab. "
-            "Produce a clear comparison table and a concrete allocation recommendation "
-            "tailored to the user's tenure and risk profile."
-        ),
-        backstory=(
-            "You are a SEBI-registered Research Analyst specialising in fixed-income "
-            "instruments. You track RBI policy, SEBI regulations, and CPI data daily. "
-            "You have helped retail investors understand why tax efficiency matters as "
-            "much as headline rates — a 7.1% PPF beats a 9% taxable FD for someone in "
-            "the 30% bracket. Your comparisons are honest, data-driven, and bias-free."
-        ),
-        tools=[compare_investment_alternatives],
-        llm=llm,
-        verbose=True,
-        allow_delegation=False,
-        max_iter=3,
-    )
