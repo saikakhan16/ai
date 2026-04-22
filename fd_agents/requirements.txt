@@ -1,18 +1,9 @@
-# FD Portfolio Optimizer - Python Dependencies
-
-# Core Framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
-
-# LLM & AI
-groq==0.9.0
-
-# Data Processing
-python-dotenv==1.0.0
-aiofiles==23.2.1
-
-# Utilities
-requests==2.31.0
-tenacity==8.2.3
-pydantic-settings==2.1.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.9.0
+groq>=0.9.0
+python-dotenv>=1.0.0
+aiofiles>=23.2.1
+requests>=2.31.0
+tenacity>=8.2.3
+pydantic-settings>=2.4.0
