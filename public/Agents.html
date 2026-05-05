@@ -167,7 +167,7 @@ function timeAgo(isoStr) {
   if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
   return `${Math.floor(diff/3600)}h ago`;
 }
-const lastRun = result?.timestamp || null;
+const lastRun = result?.timestamp || result?.created_at || new Date().toISOString();
 
 // --- Update Bank Selection Agent ---
 const bsaStatus = document.querySelector('.a1 .agent-status');
