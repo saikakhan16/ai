@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8002';
+const API_BASE = 'https://api.himotechglobal.com/ai';
 
 // ── API STATUS ────────────────────────────────────────────────────────────────
 async function checkAPI() {
