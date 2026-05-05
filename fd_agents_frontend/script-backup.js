@@ -1,5 +1,5 @@
 // Configuration
-https://api.himotechglobal.com/ai
+const API_BASE_URL = 'https://api.himotechglobal.com/ai';
 
 // DOM Elements
 const form = document.getElementById('optimizeForm');
