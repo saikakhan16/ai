@@ -236,11 +236,13 @@ async function runOptimizer() {
     const data = await res.json();
 
     if (data.success) {
-      // Save to sessionStorage for Portfolio.html
-      sessionStorage.setItem('optimizeResult', JSON.stringify(data));
-      sessionStorage.setItem('optimizeParams', JSON.stringify(state));
-      sessionStorage.setItem('optimizeTimestamp', Date.now().toString());
-      window.location.href = 'Portfolio.html';
+  sessionStorage.setItem('optimizeResult', JSON.stringify({
+    ...data,
+    timestamp: new Date().toISOString()   // ← yeh add hua
+  }));
+  sessionStorage.setItem('optimizeParams', JSON.stringify(state));
+  sessionStorage.setItem('optimizeTimestamp', Date.now().toString());
+  window.location.href = 'Portfolio.html';
     } else {
       throw new Error(data.error || 'Optimization failed');
     }
