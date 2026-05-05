@@ -3,7 +3,7 @@
 
 const API_BASE_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:8002'
-    : '';
+    : 'https://api.himotechglobal.com/ai';
 
 // ── CHART INSTANCES ──────────────────────────────────────────────────────────
 const charts = {
