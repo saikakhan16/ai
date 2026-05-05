@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'http://localhost:8000';
+https://api.himotechglobal.com/ai
 
 // DOM Elements
 const form = document.getElementById('optimizeForm');
