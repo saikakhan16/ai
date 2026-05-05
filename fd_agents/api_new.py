@@ -155,7 +155,7 @@ def _parse_allocation_from_report(report: str, total_amount: float) -> list:
 
 # ── API ENDPOINTS ──────────────────────────────────────────────────────────────
 
-@app.get("/health", response_model=HealthResponse)
+@app.get("/ai/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
     return HealthResponse(
@@ -165,7 +165,7 @@ async def health_check():
     )
 
 
-@app.post("/optimize", response_model=OptimizeResponse)
+@app.post("/ai/optimize", response_model=OptimizeResponse)
 async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
     """
     Main endpoint: Optimize FD portfolio allocation
@@ -289,7 +289,7 @@ async def optimize_portfolio(request: OptimizeRequest) -> OptimizeResponse:
         )
 
 
-@app.get("/")
+@app.get("ai/")
 async def root():
     """API documentation redirect"""
     return {
